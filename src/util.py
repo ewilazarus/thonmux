@@ -1,0 +1,2 @@
+class PymuxException(Exception):
+    pass
