@@ -60,8 +60,7 @@ class Session:
             target = self.name
         else:
             target = self.name + ':' + target
-        self.parent.execute(command, dettached=dettached, target=target,
-                            xargs=xargs)
+        self.parent.execute(command, dettached, target, xargs)
 
     def attach(self):
         self.execute('attach-session')
@@ -76,5 +75,5 @@ class Session:
 
     def rename(self, name):
         # TODO: slugfy(name)
-        self.name = name
         self.execute('rename-session', xargs=[name])
+        self.name = name
