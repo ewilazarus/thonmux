@@ -1,43 +1,49 @@
 import logging
 from shutil import which
-from subprocess import check_output, CalledProcessError, DEVNULL
+from subprocess import Popen, PIPE
 
-from util import PymuxException
+from util import ThonmuxException
 
-_logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def _which_tmux():
     """Returns the path to the tmux executable"""
 
-    print('oi')
-    _logger.info('Attempting to find "tmux" executable')
+    logger.info('Attempting to find "tmux" executable')
     ptmux = which('tmux')
     if not ptmux:
-        _logger.error('Didn\'t find "tmux" executable')
-        raise PymuxException('''The executable "tmux" was not found. Make sure
-                             it is installed and available in the $PATH.''')
-    _logger.info('Found "tmux" executable in: "%s"' % ptmux)
+        logger.error('Didn\'t find "tmux" executable')
+        message = 'The executable "tmux" was not found. Make sure it is \
+                installed and available in the $PATH.'
+        raise ThonmuxException(message)
+    logger.info('Found "tmux" executable in: "%s"' % ptmux)
     return ptmux
 
 _ptmux = _which_tmux()
 
 
 def _normalize(output):
-    """Returns a list with the normalized output's lines"""
-
-    return [line for line in output.split('\n') if line != '']
+    return [l for l in output.split('\n') if l != '']
 
 
-def run(command):
-    """Returns the output of the executions of tmux with the given commands"""
+class Binding:
 
-    _logger.info('Attempting to run command: tmux ' + command)
-    args = [_ptmux] + command.split()
-    try:
-        output = check_output(args, stderr=DEVNULL).decode()
-        return _normalize(output)
-    except (OSError, CalledProcessError):
-        _logger.error('Failed to run the command: tmux ' + command)
-        raise PymuxException('''The command "tmux {}" is not a valid tmux
-                                 command.'''.format(command))
+    def run(self, command):
+        """Returns the output of the executions of tmux with the given commands"""
+
+        logger.info('Attempting to run command: tmux ' + ' '.join(command))
+        args = [_ptmux] + command
+
+        with Popen(args, stdout=PIPE, stderr=PIPE,
+                   universal_newlines=True) as p:
+            out, err = p.communicate()
+        self.stdout = _normalize(out)
+        self.stderr = _normalize(err)
+
+        if len(self.stderr) > 0:
+            logger.warning('Failed to run the command: tmux ' +
+                         ' '.join(command))
+            message = 'The command "tmux %s" is not a valid tmux command.' % (
+                      ' '.join(command))
+            raise ThonmuxException(message)

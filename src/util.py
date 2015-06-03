@@ -1,2 +1,2 @@
-class PymuxException(Exception):
+class ThonmuxException(Exception):
     pass

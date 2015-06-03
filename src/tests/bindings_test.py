@@ -5,9 +5,11 @@ import util
 
 
 def run_test_dumb():
-    binding.run('list-sessions')
+    b = binding.Binding()
+    b.run('list-sessions')
 
 
 @raises(util.PymuxException)
 def run_test_failure():
-    binding.run('doesnotexist')
+    b = binding.Binding()
+    b.run('doesnotexist')
