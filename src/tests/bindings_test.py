@@ -6,10 +6,10 @@ import util
 
 def run_test_dumb():
     b = binding.Binding()
-    b.run('list-sessions')
+    b.run(['list-sessions'])
 
 
-@raises(util.PymuxException)
+@raises(util.ThonmuxException)
 def run_test_failure():
     b = binding.Binding()
-    b.run('doesnotexist')
+    b.run(['doesnotexist'])
