@@ -53,6 +53,7 @@ class Server:
         return b.stdout
 
     def kill(self):
+        # TODO: for s in self.sessions: s.kill()
         self.execute('kill-server')
 
     @property

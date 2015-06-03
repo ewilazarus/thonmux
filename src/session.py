@@ -70,7 +70,9 @@ class Session:
         self.parent.execute('detach-client', xargs=['-s', self.name])
 
     def kill(self):
+        # TODO: for w in self.windows: w.kill()
         self.execute('kill-session')
+        del(self.parent)     # remove unwanted reference to Server object
 
     def rename(self, name):
         # TODO: slugfy(name)
