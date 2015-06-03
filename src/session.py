@@ -76,4 +76,5 @@ class Session:
 
     def rename(self, name):
         # TODO: slugfy(name)
+        self.name = name
         self.execute('rename-session', xargs=[name])
