@@ -53,7 +53,7 @@ class Pane:
         return r
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
-        self.parent._execute(command, target=self.index, xargs=xargs)
+        return self.parent._execute(command, target=self.index, xargs=xargs)
 
     def select(self):
         self._execute('select-pane')

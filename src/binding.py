@@ -2,7 +2,7 @@ import logging
 from shutil import which
 from subprocess import Popen, PIPE
 
-from util import ThonmuxException
+import exception
 
 logger = logging.getLogger(__name__)
 
@@ -14,9 +14,7 @@ def _which_tmux():
     ptmux = which('tmux')
     if not ptmux:
         logger.error('Didn\'t find "tmux" executable')
-        message = 'The executable "tmux" was not found. Make sure it is \
-                installed and available in the $PATH.'
-        raise ThonmuxException(message)
+        raise exception.TmuxNotAvailable
     logger.info('Found "tmux" executable in: "%s"' % ptmux)
     return ptmux
 
@@ -37,15 +35,16 @@ class Binding:
 
         with Popen(args, stdout=PIPE, stderr=PIPE,
                    universal_newlines=True) as p:
-            out, err = p.communicate()
-        self.stdout = _normalize(out)
-        self.stderr = _normalize(err)
+            stdout, stderr = p.communicate()
+            returncode = p.returncode
+        self.returncode = returncode
+        self.stdout = _normalize(stdout)
+        self.stderr = _normalize(stderr)
+        logger.debug('return-code: ' + str(returncode))
         logger.debug('stdout: ' + str(self.stdout))
         logger.debug('stderr: ' + str(self.stderr))
 
-        if len(self.stderr) > 0:
-            logger.warning('Failed to run the command: tmux ' +
-                         ' '.join(command))
-            message = 'The command "tmux %s" is not a valid tmux command.' % (
-                      ' '.join(command))
-            raise ThonmuxException(message)
+        if returncode != 0:
+            logger.warning('Command failed')
+            exception.dispatcher(self.stderr[0])
+        logger.info('Command succeeded')

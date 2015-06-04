@@ -1,7 +1,7 @@
 import logging
 
 from binding import Binding
-from util import ThonmuxException
+import exception
 import session
 
 logger = logging.getLogger(__name__)
@@ -25,10 +25,10 @@ class Server:
         self.prefix = prefix
 
         try:
-            logger.info('Checking if server instance already exists')
+            logger.info('Checking if tmux server is already running')
             self._execute('has-session')
-        except ThonmuxException:
-            logger.info('No instance found. Starting new server instance')
+        except exception.ServerNotFound:
+            logger.info('Tmux server not running. Starting new tmux server')
             self._execute('new-session', dettached=True)
 
         self.id += 1
