@@ -2,12 +2,16 @@ from datetime import datetime
 import logging
 import re
 
+import window
+
 logger = logging.getLogger(__name__)
 
 _regex = re.compile((r"^(?P<name>.+):\s"
                     "\d+\swindows\s\(created\s\w+\s"
                     "(?P<timestr>\w+\s+\d+\s\d+:\d+:\d+\s\d+)\)"
-                    "\s\[.*\]"
+                    "\s\["
+                    "(?P<width>\d+)x(?P<height>\d+)"
+                    ".*\]"
                     "(\s\((?P<attached>attached)\))?$"))
 
 
@@ -19,6 +23,8 @@ def _parse(line):
         timestr = m.group('timestr')
         timestamp = datetime.strptime(timestr, '%b %d  %H:%M:%S %Y')
         kwargs['timestamp'] = timestamp
+        kwargs['width'] = int(m.group('width'))
+        kwargs['height'] = int(m.group('height'))
         kwargs['attached'] = m.group('attached') is not None
     else:
         logger.debug('Failed to apply regex "%s" in the string "%s"' % (
@@ -36,44 +42,44 @@ def factory(output, parent):
 
 class Session:
 
-    def __init__(self, parent, name, timestamp, attached):
+    def __init__(self, parent, name, timestamp, height, width, attached):
         logger.info('Attempting to create session instance (name=%s)' % name)
         self.parent = parent
         self.name = name
         self.creation = timestamp
+        self.height = height
+        self.width = width
         self.attached = attached
         logger.info('Session instance successfully created')
 
     def __repr__(self):
+        r = 'Session(name=%s, creation=%s)' % (self.name, self.creation)
         if self.attached:
-            r = 'Session(name=%s, creation=%s)*' % (self.name, self.creation)
-        else:
-            r = 'Session(name=%s, creation=%s)' % (self.name, self.creation)
+            r += '*'
         return r
 
-    # TODO: Tentar fazer __call__ e testar se o parent e nulo. Se for, entao
-    #       significa que ele esta criando uma sessao a partir de um comando
-    #       ao inves de a partir da factory.
-
-    def execute(self, command, dettached=False, target=None, xargs=None):
+    def _execute(self, command, dettached=False, target=None, xargs=None):
         if not target:
             target = self.name
         else:
             target = self.name + ':' + target
-        self.parent.execute(command, dettached, target, xargs)
+        return self.parent._execute(command, dettached, target, xargs)
 
     def attach(self):
-        self.execute('attach-session')
-
-    def detach(self):
-        self.parent.execute('detach-client', xargs=['-s', self.name])
+        self._execute('attach-session')
+        self.attached = True
 
     def kill(self):
         # TODO: for w in self.windows: w.kill()
-        self.execute('kill-session')
+        self._execute('kill-session')
         del(self.parent)     # remove unwanted reference to Server object
 
     def rename(self, name):
         # TODO: slugfy(name)
-        self.execute('rename-session', xargs=[name])
+        self._execute('rename-session', xargs=[name])
         self.name = name
+
+    @property
+    def windows(self):
+        output = self._execute('list-windows')
+        return window.factory(output, parent=self)

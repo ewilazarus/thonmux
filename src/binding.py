@@ -40,6 +40,8 @@ class Binding:
             out, err = p.communicate()
         self.stdout = _normalize(out)
         self.stderr = _normalize(err)
+        logger.debug('stdout: ' + str(self.stdout))
+        logger.debug('stderr: ' + str(self.stderr))
 
         if len(self.stderr) > 0:
             logger.warning('Failed to run the command: tmux ' +

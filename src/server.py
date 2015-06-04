@@ -26,10 +26,10 @@ class Server:
 
         try:
             logger.info('Checking if server instance already exists')
-            self.execute('has-session')
+            self._execute('has-session')
         except ThonmuxException:
             logger.info('No instance found. Starting new server instance')
-            self.execute('new-session', dettached=True)
+            self._execute('new-session', dettached=True)
 
         self.id += 1
         logger.info('Server instance successfully started')
@@ -37,7 +37,7 @@ class Server:
     def __repr__(self):
         return 'Server(id=%s)' % self.id
 
-    def execute(self, command, dettached=False, target=None, xargs=None):
+    def _execute(self, command, dettached=False, target=None, xargs=None):
         final_command = self.prefix[:]
         final_command += [command]
         if dettached:
@@ -54,9 +54,9 @@ class Server:
 
     def kill(self):
         # TODO: for s in self.sessions: s.kill()
-        self.execute('kill-server')
+        self._execute('kill-server')
 
     @property
     def sessions(self):
-        output = self.execute('list-sessions')
+        output = self._execute('list-sessions')
         return session.factory(output, parent=self)
