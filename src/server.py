@@ -25,7 +25,6 @@ _tmpdir = _characterize()
 class Server:
 
     def __init__(self, socket_name='default', socket_path=None):
-        logger.debug('Attempting to start tmux server instance')
         prefix = []
         if socket_path:
             prefix.append('-S')
@@ -43,7 +42,7 @@ class Server:
         except exception.ServerNotFound:
             logger.debug('Tmux server not running. Starting new tmux server')
             self._execute('new-session', dettached=True)
-        logger.debug('Server instance successfully started')
+        logger.debug('Server instance started -> ' + str(self))
 
     def __repr__(self):
         return 'Server(path=%s)' % self.path

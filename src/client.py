@@ -27,13 +27,12 @@ def parse(line):
 class Client:
 
     def __init__(self, parent, path, terminal, encoding, session_name):
-        logger.info('Attempting to create client instance (path=%s)' % path)
         self.parent = parent
         self.path = path
         self.terminal = terminal
         self.encoding = encoding
         self.session_name = session_name
-        logger.info('Client instance successfully created')
+        logger.debug('Client instance created: ' + str(self))
 
     def __repr__(self):
         return ('Client(path=%s, terminal=%s, encoding=%s,'

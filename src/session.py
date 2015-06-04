@@ -36,14 +36,13 @@ def parse(line):
 class Session:
 
     def __init__(self, parent, name, timestamp, height, width, attached):
-        logger.debug('Attempting to create session instance (name=%s)' % name)
         self.parent = parent
         self.name = name
         self.creation = timestamp
         self.height = height
         self.width = width
         self.attached = attached
-        logger.debug('Session instance successfully created')
+        logger.debug('Session instance created -> ' + str(self))
 
     def __repr__(self):
         r = 'Session(name=%s, creation=%s)' % (self.name, self.creation)
