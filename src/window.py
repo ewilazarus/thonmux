@@ -50,8 +50,9 @@ class Window:
                                                                self.width,
                                                                self.height)
         if self.status:
-            r += '*'
-            if self.status == 'last':
+            if self.status == 'active':
+                r += '*'
+            else:
                 r += '-'
         return r
 
