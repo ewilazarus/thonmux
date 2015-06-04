@@ -52,11 +52,10 @@ class Session:
         return r
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
+        t = self.name
         if target:
-            target = self.name + ':' + target
-        else:
-            target = self.name
-        return self.parent._execute(command, dettached, target, xargs)
+            t += (':' + target)
+        return self.parent._execute(command, dettached, t, xargs)
 
     def attach(self):
         self._execute('attach-session')

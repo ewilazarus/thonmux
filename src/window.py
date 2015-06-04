@@ -57,11 +57,10 @@ class Window:
         return r
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
+        t = self.index
         if target:
-            target = self.index + '.' + target
-        else:
-            target = self.index
-        return self.parent._execute(command, dettached, target, xargs)
+            t += ('.' + target)
+        return self.parent._execute(command, dettached, t, xargs)
 
     def select(self):
         self._execute('select-window')
