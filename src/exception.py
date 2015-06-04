@@ -10,23 +10,23 @@ class UnknownOption(Exception):
     pass
 
 
-class ObjectNotFound(Exception):
+class EntityNotFound(Exception):
     pass
 
 
-class ServerNotFound(ObjectNotFound):
+class ServerNotFound(EntityNotFound):
     pass
 
 
-class SessionNotFound(ObjectNotFound):
+class SessionNotFound(EntityNotFound):
     pass
 
 
-class WindowNotFound(ObjectNotFound):
+class WindowNotFound(EntityNotFound):
     pass
 
 
-class PaneNotFound(ObjectNotFound):
+class PaneNotFound(EntityNotFound):
     pass
 
 
