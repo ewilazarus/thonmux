@@ -10,19 +10,19 @@ logger = logging.getLogger(__name__)
 def _which_tmux():
     """Returns the path to the tmux executable"""
 
-    logger.info('Attempting to find "tmux" executable')
+    logger.debug('Attempting to find "tmux" executable')
     ptmux = which('tmux')
     if not ptmux:
         logger.error('Didn\'t find "tmux" executable')
         raise exception.TmuxNotAvailable
-    logger.info('Found "tmux" executable in: "%s"' % ptmux)
+    logger.debug('Found "tmux" executable in: "%s"' % ptmux)
     return ptmux
 
 _ptmux = _which_tmux()
 
 
 def _normalize(output):
-    return [l for l in output.split('\n') if l != '']
+    return [l.strip() for l in output.split('\n') if l != '']
 
 
 def run(command):
@@ -39,7 +39,7 @@ def run(command):
     logger.debug('stderr: ' + str(stderr))
 
     if returncode != 0:
-        logger.warning('Command failed')
+        logger.warning('Failure')
         exception.dispatcher(stderr[0])
-    logger.info('Command succeeded')
+    logger.info('Success')
     return stdout

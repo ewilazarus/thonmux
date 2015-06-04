@@ -26,8 +26,9 @@ def parse(line):
 
 class Client:
 
-    def __init__(self, path, terminal, encoding, session_name):
+    def __init__(self, parent, path, terminal, encoding, session_name):
         logger.info('Attempting to create client instance (path=%s)' % path)
+        self.parent = parent
         self.path = path
         self.terminal = terminal
         self.encoding = encoding
@@ -40,5 +41,7 @@ class Client:
                                  self.session_name))
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
-        pass
-        # TODO: Criar execute
+        self.parent._execute(command, dettached, self.path, xargs)
+
+    def detach(self):
+        self._execute('detach-client')

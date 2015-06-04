@@ -6,6 +6,10 @@ class UnknownCommand(Exception):
     pass
 
 
+class UnknownOption(Exception):
+    pass
+
+
 class ObjectNotFound(Exception):
     pass
 
@@ -26,14 +30,15 @@ class PaneNotFound(ObjectNotFound):
     pass
 
 
-def dispatcher(error):
+def dispatcher(message):
     e = {
         'unknown command': UnknownCommand,
+        'tmux: unknown option': UnknownOption,
         'failed to connect to server': ServerNotFound,
         'session not found': SessionNotFound,
         'window not found': WindowNotFound,
         'can\'t find pane': PaneNotFound,
     }
-    for message in e.keys():
-        if error.startswith(message):
-            raise e[message]()
+    for error in e.keys():
+        if message.startswith(error):
+            raise e[error](message)

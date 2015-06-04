@@ -35,12 +35,12 @@ def parse(line):
 class Window:
 
     def __init__(self, parent, index, name, status):
-        logger.info('Attempting to create window instance (index=%s)' % index)
+        logger.debug('Attempting to create window instance (index=%s)' % index)
         self.parent = parent
         self.index = index
         self.name = name
         self.status = status
-        logger.info('Window instance successfully created')
+        logger.debug('Window instance successfully created')
 
     def __lt__(self, other):
         return self.index < other.index

@@ -26,13 +26,13 @@ def parse(line):
 class Pane:
 
     def __init__(self, parent, index, width, height, active):
-        logger.info('Attempting to create pane instance (index=%s)' % index)
+        logger.debug('Attempting to create pane instance (index=%s)' % index)
         self.parent = parent
         self.index = index
         self.width = width
         self.height = height
         self.active = active
-        logger.info('Pane instance successfully created')
+        logger.debug('Pane instance successfully created')
 
     def __lt__(self, other):
         return self.index < other.index
