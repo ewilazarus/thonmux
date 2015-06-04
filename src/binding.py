@@ -10,12 +10,12 @@ logger = logging.getLogger(__name__)
 def _which_tmux():
     """Returns the path to the tmux executable"""
 
-    logger.debug('Attempting to find "tmux" executable')
+    logger.debug('Attempting to find tmux executable')
     ptmux = which('tmux')
     if not ptmux:
-        logger.error('Didn\'t find "tmux" executable')
+        logger.error("Didn't find tmux executable")
         raise exception.TmuxNotAvailable
-    logger.debug('Found "tmux" executable in: "%s"' % ptmux)
+    logger.debug('Found tmux executable in: "%s"' % ptmux)
     return ptmux
 
 _ptmux = _which_tmux()

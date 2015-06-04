@@ -1,16 +1,20 @@
-class TmuxNotAvailable(Exception):
+class ThonmuxException(Exception):
     pass
 
 
-class UnknownCommand(Exception):
+class TmuxNotAvailable(ThonmuxException):
     pass
 
 
-class UnknownOption(Exception):
+class UnknownCommand(ThonmuxException):
     pass
 
 
-class EntityNotFound(Exception):
+class UnknownOption(ThonmuxException):
+    pass
+
+
+class EntityNotFound(ThonmuxException):
     pass
 
 
@@ -42,3 +46,4 @@ def dispatcher(message):
     for error in e.keys():
         if message.startswith(error):
             raise e[error](message)
+    raise ThonmuxException(message)
