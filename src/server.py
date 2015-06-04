@@ -1,27 +1,37 @@
 import logging
+import os
 
-from binding import Binding
+import binding
+import client
 import exception
+from misc import instance_factory
 import session
 
 logger = logging.getLogger(__name__)
 
 
-class Server:
-    id = -1
+def _characterize(socket_name):
+    root = os.environ.get('TMUX_TMPDIR', None)
+    if not root:
+        root = os.environ.get('TMPDIR', None)
+    if not root:
+        root = os.path.join('/', 'tmp', 'tmux1000')
+    return os.path.join(root, socket_name)
 
-    def __init__(self, socket_name=None, socket_path=None):
+
+class Server:
+
+    def __init__(self, socket_name='default', socket_path=None):
         logger.info('Attempting to start tmux server instance')
         prefix = []
-        if socket_name:
-            prefix.append('-L')
-            prefix.append(socket_name)
         if socket_path:
             prefix.append('-S')
             prefix.append(socket_path)
-
-        self.socket_name = socket_name
-        self.socket_path = socket_path
+            self.path = socket_path
+        else:
+            prefix.append('-L')
+            prefix.append(socket_name)
+            self.path = _characterize(socket_name)
         self.prefix = prefix
 
         try:
@@ -30,12 +40,10 @@ class Server:
         except exception.ServerNotFound:
             logger.info('Tmux server not running. Starting new tmux server')
             self._execute('new-session', dettached=True)
-
-        self.id += 1
         logger.info('Server instance successfully started')
 
     def __repr__(self):
-        return 'Server(id=%s)' % self.id
+        return 'Server(path=%s)' % self.path
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
         final_command = self.prefix[:]
@@ -47,10 +55,7 @@ class Server:
             final_command.append(target)
         if xargs:
             final_command += xargs
-
-        b = Binding()
-        b.run(final_command)
-        return b.stdout
+        return binding.run(final_command)
 
     def kill(self):
         # TODO: for s in self.sessions: s.kill()
@@ -59,4 +64,11 @@ class Server:
     @property
     def sessions(self):
         output = self._execute('list-sessions')
-        return session.factory(output, parent=self)
+        return instance_factory(session.Session, parser=session.parse,
+                                parent=self, output=output)
+
+    @property
+    def clients(self):
+        output = self._execute('list-clients')
+        return instance_factory(client.Client, parser=client.parse,
+                                parent=self, output=output)

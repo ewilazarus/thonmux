@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 import re
 
+from misc import instance_factory
 import window
 
 logger = logging.getLogger(__name__)
@@ -15,7 +16,7 @@ _regex = re.compile((r"^(?P<name>.+):\s"
                     "(\s\((?P<attached>attached)\))?$"))
 
 
-def _parse(line):
+def parse(line):
     kwargs = {}
     m = re.match(_regex, line)
     if m:
@@ -27,17 +28,9 @@ def _parse(line):
         kwargs['height'] = int(m.group('height'))
         kwargs['attached'] = m.group('attached') is not None
     else:
-        logger.debug('Failed to apply regex "%s" in the string "%s"' % (
+        logger.debug('Failed to apply regex "%s" to the string "%s"' % (
                      _regex.pattern, line))
     return kwargs
-
-
-def factory(output, parent):
-    sessions = []
-    for line in output:
-        kwargs = _parse(line)
-        sessions.append(Session(parent, **kwargs))
-    return sessions
 
 
 class Session:
@@ -59,10 +52,10 @@ class Session:
         return r
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
-        if not target:
-            target = self.name
-        else:
+        if target:
             target = self.name + ':' + target
+        else:
+            target = self.name
         return self.parent._execute(command, dettached, target, xargs)
 
     def attach(self):
@@ -82,4 +75,5 @@ class Session:
     @property
     def windows(self):
         output = self._execute('list-windows')
-        return window.factory(output, parent=self)
+        return instance_factory(window.Window, parser=window.parse,
+                                parent=self, output=output)

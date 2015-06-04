@@ -9,7 +9,7 @@ _regex = re.compile((r"^(?P<index>\d+):\s"
                      "(\((?P<active>active)\))?$"))
 
 
-def _parse(line):
+def parse(line):
     kwargs = {}
     m = re.match(_regex, line)
     if m:
@@ -18,17 +18,9 @@ def _parse(line):
         kwargs['height'] = int(m.group('height'))
         kwargs['active'] = m.group('active') is not None
     else:
-        logger.debug('Failed to apply regex "%s" in the string "%s"' % (
+        logger.debug('Failed to apply regex "%s" to the string "%s"' % (
                      _regex.pattern, line))
     return kwargs
-
-
-def factory(output, parent):
-    panes = []
-    for line in output:
-        kwargs = _parse(line)
-        panes.append(Pane(parent, **kwargs))
-    return panes
 
 
 class Pane:

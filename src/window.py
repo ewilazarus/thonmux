@@ -1,6 +1,7 @@
 import logging
 import re
 
+from misc import instance_factory
 import pane
 
 logger = logging.getLogger(__name__)
@@ -11,12 +12,11 @@ _regex = re.compile((r"^(?P<index>\d+):\s"
                      ".*$"))
 
 
-def _parse(line):
+def parse(line):
     def parse_status(raw_status):
         if raw_status:
-            if raw_status == '*':
-                status = 'active'
-            else:
+            status = 'active'
+            if raw_status == '-':
                 status = 'last'
             return status
 
@@ -27,17 +27,9 @@ def _parse(line):
         kwargs['name'] = m.group('name')
         kwargs['status'] = parse_status(m.group('status'))
     else:
-        logger.debug('Failed to apply regex "%s" in the string "%s"' % (
+        logger.debug('Failed to apply regex "%s" to the string "%s"' % (
                      _regex.pattern, line))
     return kwargs
-
-
-def factory(output, parent):
-    windows = []
-    for line in output:
-        kwargs = _parse(line)
-        windows.append(Window(parent, **kwargs))
-    return windows
 
 
 class Window:
@@ -59,17 +51,16 @@ class Window:
                                                                self.width,
                                                                self.height)
         if self.status:
-            if self.status == 'active':
-                r += '*'
-            else:
+            r += '*'
+            if self.status == 'last':
                 r += '-'
         return r
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
-        if not target:
-            target = self.index
-        else:
+        if target:
             target = self.index + '.' + target
+        else:
+            target = self.index
         return self.parent._execute(command, dettached, target, xargs)
 
     def select(self):
@@ -97,4 +88,5 @@ class Window:
     @property
     def panes(self):
         output = self._execute('list-panes')
-        return pane.factory(output, parent=self)
+        return instance_factory(pane.Pane, parser=pane.parse,
+                                parent=self, output=output)
