@@ -34,7 +34,7 @@ class Server:
             prefix.append('-L')
             prefix.append(socket_name)
             self.path = os.path.join(_tmpdir, socket_name)
-            self.prefix = prefix
+        self.prefix = prefix
 
         try:
             logger.debug('Checking if tmux server is already running')
