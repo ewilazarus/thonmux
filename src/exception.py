@@ -19,11 +19,11 @@ class UnknownOption(Exception):
     pass
 
 
-class EntityOutOfSync(Exception):
+class CreateWindowFailed(Exception):
     pass
 
 
-class CreateWindowFailed(EntityOutOfSync):
+class EntityOutOfSync(Exception):
     pass
 
 

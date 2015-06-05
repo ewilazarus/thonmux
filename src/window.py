@@ -1,6 +1,7 @@
 import logging
 import re
 
+from exception import EntityOutOfSync
 from misc import instance_factory
 import pane
 
@@ -58,6 +59,16 @@ class Window:
         return r
 
     @property
+    def active_pane(self):
+        matches = list(filter(lambda p: p.active, self.panes))
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            # TODO
+            raise NotImplementedError(('window might not be up to date: try'
+                                       'sync and another search'))
+
+    @property
     def height(self):
         return self.parent.height
 
@@ -70,6 +81,7 @@ class Window:
         output = self._execute('list-panes')
         self.panes = instance_factory(pane.Pane, parser=pane.parse,
                                       parent=self, output=output)
+        return self
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
         t = self.index
@@ -77,13 +89,9 @@ class Window:
             t += ('.' + target)
         return self.parent._execute(command, dettached, t, xargs)
 
-    def select(self):
-        self._execute('select-window')
-        self.status = 'active'
-
     def kill(self):
         self._execute('kill-window')
-        self.parent._sync()
+        raise EntityOutOfSync
 
     def rename(self, name):
         # TODO: slugfy(name)
@@ -98,7 +106,11 @@ class Window:
             xargs.append('-c')
             xargs.append(start_dir)
         self._execute('split-window', target=target, xargs=xargs)
-        self._sync()
+        raise EntityOutOfSync
+
+    def select(self, xargs=None):
+        self._execute('select-window', xargs=xargs)
+        self.status = 'active'
 
     def find_pane(self, index):
         matches = list(filter(lambda p: p.index == index, self.panes))
@@ -108,3 +120,8 @@ class Window:
             # TODO
             raise NotImplementedError(('window might not be up to date: try'
                                        'sync and another search'))
+
+    def select_pane(self, index):
+        p = self.find_pane(index)
+        p.select()
+        raise EntityOutOfSync

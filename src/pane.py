@@ -1,6 +1,8 @@
 import logging
 import re
 
+from exception import EntityOutOfSync
+
 logger = logging.getLogger(__name__)
 
 _regex = re.compile((r"^(?P<index>\d+):\s"
@@ -52,7 +54,7 @@ class Pane:
 
     def kill(self):
         self._execute('kill-pane')
-        self.parent._sync()
+        raise EntityOutOfSync
 
     def send_keys(self, keys, enter=True):
         self._execute('send-keys', xargs=[keys])

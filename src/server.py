@@ -56,6 +56,7 @@ class Server:
         output = self._execute('list-clients')
         self.clients = instance_factory(client.Client, parser=client.parse,
                                         parent=self, output=output)
+        return self
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
         final_command = self.prefix[:]

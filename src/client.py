@@ -31,13 +31,13 @@ class Client:
         self.path = path
         self.terminal = terminal
         self.encoding = encoding
-        self.session_name = session_name
+        self.session = parent.find_session(session_name)
         logger.debug('Client instance created -> ' + str(self))
 
     def __repr__(self):
         return ('Client(path=%s, terminal=%s, encoding=%s,'
                 'session=%s)' % (self.path, self.terminal, self.encoding,
-                                 self.session_name))
+                                 self.session))
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
         self.parent._execute(command, dettached, self.path, xargs)

@@ -2,6 +2,7 @@ from datetime import datetime
 import logging
 import re
 
+from exception import EntityOutOfSync
 from misc import instance_factory
 import window
 
@@ -52,11 +53,22 @@ class Session:
             r += '*'
         return r
 
+    @property
+    def active_window(self):
+        matches = list(filter(lambda w: w.status == 'active', self.windows))
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            # TODO
+            raise NotImplementedError(('session might not be up to date: try'
+                                       'sync and another search'))
+
     def _sync(self):
         logger.debug('Synchronizing ' + str(self))
         output = self._execute('list-windows')
         self.windows = instance_factory(window.Window, parser=window.parse,
                                         parent=self, output=output)
+        return self
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
         t = self.name + ':'
@@ -70,7 +82,6 @@ class Session:
 
     def kill(self):
         self._execute('kill-session')
-        self.parent._sync()
 
     def rename(self, name):
         # TODO: slugfy(name)
@@ -85,18 +96,9 @@ class Session:
             xargs.append('-c')
             xargs.append(start_dir)
         self._execute('new-window', target=target, xargs=xargs)
-        self._sync()
+        raise EntityOutOfSync
 
-    def find_window_by_name(self, name):
-        matches = list(filter(lambda w: w.name == name, self.windows))
-        if len(matches) == 1:
-            return matches[0]
-        else:
-            # TODO
-            raise NotImplementedError(('session might not be up to date: try'
-                                       'sync and another search'))
-
-    def find_window_by_index(self, index):
+    def find_window(self, index):
         matches = list(filter(lambda w: w.index == index, self.windows))
         if len(matches) == 1:
             return matches[0]
@@ -104,3 +106,20 @@ class Session:
             # TODO
             raise NotImplementedError(('session might not be up to date: try'
                                        'sync and another search'))
+
+    def select_window(self, index):
+        w = self.find_window(index)
+        w.select()
+        raise EntityOutOfSync
+
+    def next_window(self):
+        self._execute('next-window')
+        raise EntityOutOfSync
+
+    def previous_window(self):
+        self._execute('previous-window')
+        raise EntityOutOfSync
+
+    def last_window(self):
+        self._execute('last-window')
+        raise EntityOutOfSync
