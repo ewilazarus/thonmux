@@ -42,10 +42,20 @@ class Server:
         except exception.ServerNotFound:
             logger.debug('Tmux server not running. Starting new tmux server')
             self._execute('new-session', dettached=True)
+        self._sync()
         logger.debug('Server instance started -> ' + str(self))
 
     def __repr__(self):
         return 'Server(path=%s)' % self.path
+
+    def _sync(self):
+        logger.debug('Synchronizing ' + str(self))
+        output = self._execute('list-sessions')
+        self.sessions = instance_factory(session.Session, parser=session.parse,
+                                         parent=self, output=output)
+        output = self._execute('list-clients')
+        self.clients = instance_factory(client.Client, parser=client.parse,
+                                        parent=self, output=output)
 
     def _execute(self, command, dettached=False, target=None, xargs=None):
         final_command = self.prefix[:]
@@ -60,17 +70,13 @@ class Server:
         return binding.run(final_command)
 
     def kill(self):
-        # TODO: for s in self.sessions: s.kill()
         self._execute('kill-server')
 
-    @property
-    def sessions(self):
-        output = self._execute('list-sessions')
-        return instance_factory(session.Session, parser=session.parse,
-                                parent=self, output=output)
-
-    @property
-    def clients(self):
-        output = self._execute('list-clients')
-        return instance_factory(client.Client, parser=client.parse,
-                                parent=self, output=output)
+    def find_session(self, name):
+        matches = list(filter(lambda s: s.name == name, self.sessions))
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            # TODO
+            raise NotImplementedError(('server might not be up to date: try'
+                                       'sync and another search'))

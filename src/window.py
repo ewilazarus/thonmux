@@ -39,6 +39,7 @@ class Window:
         self.index = index
         self.name = name
         self.status = status
+        self._sync()
         logger.debug('Window instance created -> ' + str(self))
 
     def __lt__(self, other):
@@ -56,6 +57,20 @@ class Window:
                 r += '-'
         return r
 
+    @property
+    def height(self):
+        return self.parent.height
+
+    @property
+    def width(self):
+        return self.parent.width
+
+    def _sync(self):
+        logger.debug('Synchronizing ' + str(self))
+        output = self._execute('list-panes')
+        self.panes = instance_factory(pane.Pane, parser=pane.parse,
+                                      parent=self, output=output)
+
     def _execute(self, command, dettached=False, target=None, xargs=None):
         t = self.index
         if target:
@@ -67,25 +82,29 @@ class Window:
         self.status = 'active'
 
     def kill(self):
-        # TODO: for p in self.panes: p.kill()
         self._execute('kill-window')
-        del(self.parent)
+        self.parent._sync()
 
     def rename(self, name):
         # TODO: slugfy(name)
         self._execute('rename-window', xargs=[name])
         self.name = name
 
-    @property
-    def height(self):
-        return self.parent.height
+    def split(self, horizontal=False, start_dir=None, target=None):
+        xargs = []
+        if horizontal:
+            xargs.append('-h')
+        if start_dir:
+            xargs.append('-c')
+            xargs.append(start_dir)
+        self._execute('split-window', target=target, xargs=xargs)
+        self._sync()
 
-    @property
-    def width(self):
-        return self.parent.width
-
-    @property
-    def panes(self):
-        output = self._execute('list-panes')
-        return instance_factory(pane.Pane, parser=pane.parse,
-                                parent=self, output=output)
+    def find_pane(self, index):
+        matches = list(filter(lambda p: p.index == index, self.panes))
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            # TODO
+            raise NotImplementedError(('window might not be up to date: try'
+                                       'sync and another search'))

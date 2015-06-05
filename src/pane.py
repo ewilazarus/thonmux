@@ -52,7 +52,7 @@ class Pane:
 
     def kill(self):
         self._execute('kill-pane')
-        del(self.parent)
+        self.parent._sync()
 
     def send_keys(self, keys, enter=True):
         self._execute('send-keys', xargs=[keys])

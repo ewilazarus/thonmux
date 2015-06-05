@@ -3,11 +3,11 @@ import re
 
 logger = logging.getLogger(__name__)
 
-_regex = re.compile((r"^(?P<path>.*?):\s"
-                     "(?P<session_name>\d+)\s"
+_regex = re.compile((r"^(?P<path>.+?):\s"
+                     "(?P<session_name>.+?)\s"
                      "\[\d+x\d+\s"
-                     "(?P<terminal>.*?)\]\s"
-                     "\((?P<encoding>.*?)\)$"))
+                     "(?P<terminal>.+?)\]\s"
+                     "\((?P<encoding>.+?)\)$"))
 
 
 def parse(line):
@@ -32,7 +32,7 @@ class Client:
         self.terminal = terminal
         self.encoding = encoding
         self.session_name = session_name
-        logger.debug('Client instance created: ' + str(self))
+        logger.debug('Client instance created -> ' + str(self))
 
     def __repr__(self):
         return ('Client(path=%s, terminal=%s, encoding=%s,'
@@ -44,3 +44,4 @@ class Client:
 
     def detach(self):
         self._execute('detach-client')
+        self.parent._sync()

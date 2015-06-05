@@ -17,13 +17,14 @@ _regex = re.compile((r"^(?P<name>.+):\s"
 
 
 def parse(line):
+    def parse_timestr(timestr):
+        return datetime.strptime(timestr, '%b %d  %H:%M:%S %Y')
+
     kwargs = {}
     m = re.match(_regex, line)
     if m:
         kwargs['name'] = m.group('name')
-        timestr = m.group('timestr')
-        timestamp = datetime.strptime(timestr, '%b %d  %H:%M:%S %Y')
-        kwargs['timestamp'] = timestamp
+        kwargs['timestamp'] = parse_timestr(m.group('timestr'))
         kwargs['width'] = int(m.group('width'))
         kwargs['height'] = int(m.group('height'))
         kwargs['attached'] = m.group('attached') is not None
@@ -42,6 +43,7 @@ class Session:
         self.height = height
         self.width = width
         self.attached = attached
+        self._sync()
         logger.debug('Session instance created -> ' + str(self))
 
     def __repr__(self):
@@ -50,10 +52,16 @@ class Session:
             r += '*'
         return r
 
+    def _sync(self):
+        logger.debug('Synchronizing ' + str(self))
+        output = self._execute('list-windows')
+        self.windows = instance_factory(window.Window, parser=window.parse,
+                                        parent=self, output=output)
+
     def _execute(self, command, dettached=False, target=None, xargs=None):
-        t = self.name
+        t = self.name + ':'
         if target:
-            t += (':' + target)
+            t += target
         return self.parent._execute(command, dettached, t, xargs)
 
     def attach(self):
@@ -61,17 +69,38 @@ class Session:
         self.attached = True
 
     def kill(self):
-        # TODO: for w in self.windows: w.kill()
         self._execute('kill-session')
-        del(self.parent)     # remove unwanted reference to Server object
+        self.parent._sync()
 
     def rename(self, name):
         # TODO: slugfy(name)
         self._execute('rename-session', xargs=[name])
         self.name = name
 
-    @property
-    def windows(self):
-        output = self._execute('list-windows')
-        return instance_factory(window.Window, parser=window.parse,
-                                parent=self, output=output)
+    def new_window(self, name, start_dir=None, target=None):
+        xargs = []
+        xargs.append('-n')
+        xargs.append(name)
+        if start_dir:
+            xargs.append('-c')
+            xargs.append(start_dir)
+        self._execute('new-window', target=target, xargs=xargs)
+        self._sync()
+
+    def find_window_by_name(self, name):
+        matches = list(filter(lambda w: w.name == name, self.windows))
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            # TODO
+            raise NotImplementedError(('session might not be up to date: try'
+                                       'sync and another search'))
+
+    def find_window_by_index(self, index):
+        matches = list(filter(lambda w: w.index == index, self.windows))
+        if len(matches) == 1:
+            return matches[0]
+        else:
+            # TODO
+            raise NotImplementedError(('session might not be up to date: try'
+                                       'sync and another search'))
