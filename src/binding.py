@@ -26,7 +26,7 @@ def _normalize(output):
 
 
 def run(command):
-    logger.info('Attempting to run command: tmux ' + ' '.join(command))
+    logger.info('Running command: tmux ' + ' '.join(command))
     args = [_ptmux] + command
 
     with Popen(args, stdout=PIPE, stderr=PIPE, universal_newlines=True) as p:
@@ -39,7 +39,7 @@ def run(command):
     logger.debug('stderr: ' + str(stderr))
 
     if returncode != 0:
-        logger.warning('Failure')
+        logger.debug('Command failed')
         exception.dispatcher(stderr[0])
-    logger.info('Success')
+    logger.debug('Command succeeded')
     return stdout

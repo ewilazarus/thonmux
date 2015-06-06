@@ -18,24 +18,12 @@ def synchronous(cls):
             try:
                 return f(self, *args, **kwargs)
             except EntityOutOfSync:
-                if not self.watch[f.__name__]:
-                    self.sync()
-                    self.watch[f.__name__] = True
-                    return f(self, *args, **kwargs)
-                self.watch[f.__name__] = False
+                self.sync()
         return wrapper
 
-    watch = {}
     for name, member in inspect.getmembers(cls):
-        if name in _watched_methods:
-            watch[name] = False
+        if callable(member) and name in _watched_methods:
             setattr(cls, name, action(member))
-
-    init = cls.__init__
-    def __init__(self, *args, **kwargs):
-        init(self, *args, **kwargs)
-        setattr(cls, 'watch', watch)
-    cls.__init__ = __init__
     return cls
 
 
@@ -111,18 +99,11 @@ class Manager:
     def kill_pane(self):
         self._pane.kill()
 
+    def toggle_zoom(self):
+        self._pane.zoom()
+
+    def resize_pane(self, x, y):
+        self._pane.resize(x, y)
+
     def send_keys(self, keys, enter=True):
         self._pane.send_keys(keys, enter)
-
-
-if __name__ == '__main__':
-    import logging, sys
-    import server
-
-    logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
-
-    sv = server.Server()
-    s = sv.find_session('0')
-
-    m = Manager(s)
-    import pdb; pdb.set_trace()

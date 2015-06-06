@@ -16,17 +16,15 @@ _regex = re.compile((r"^(?P<index>\d+):\s"
 def parse(line):
     def parse_status(raw_status):
         if raw_status:
-            status = 'active'
-            if raw_status == '-':
-                status = 'last'
-            return status
+            return raw_status == '*'
+        return False
 
     kwargs = {}
     m = re.match(_regex, line)
     if m:
         kwargs['index'] = m.group('index')
         kwargs['name'] = m.group('name')
-        kwargs['status'] = parse_status(m.group('status'))
+        kwargs['active'] = parse_status(m.group('status'))
     else:
         logger.debug('Failed to apply regex "%s" to the string "%s"' % (
                      _regex.pattern, line))
@@ -35,11 +33,11 @@ def parse(line):
 
 class Window:
 
-    def __init__(self, parent, index, name, status):
+    def __init__(self, parent, index, name, active):
         self.parent = parent
         self.index = index
         self.name = name
-        self.status = status
+        self.active = active
         self._sync()
         logger.debug('Window instance created -> ' + str(self))
 
@@ -51,11 +49,8 @@ class Window:
                                                                self.name,
                                                                self.width,
                                                                self.height)
-        if self.status:
-            if self.status == 'active':
+        if self.active:
                 r += '*'
-            else:
-                r += '-'
         return r
 
     @property
@@ -110,7 +105,7 @@ class Window:
 
     def select(self, xargs=None):
         self._execute('select-window', xargs=xargs)
-        self.status = 'active'
+        self.active = True
 
     def find_pane(self, index):
         matches = list(filter(lambda p: p.index == index, self.panes))
@@ -124,4 +119,3 @@ class Window:
     def select_pane(self, index):
         p = self.find_pane(index)
         p.select()
-        raise EntityOutOfSync

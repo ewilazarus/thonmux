@@ -56,6 +56,18 @@ class Pane:
         self._execute('kill-pane')
         raise EntityOutOfSync
 
+    def resize(self, x, y, xargs=None):
+        if not xargs:
+            xargs = []
+            xargs.append('-x')
+            xargs.append(x)
+            xargs.append('-y')
+            xargs.append(y)
+        self._execute('resize-pane', xargs=xargs)
+
+    def zoom(self):
+        self.resize(None, None, ['-Z'])
+
     def send_keys(self, keys, enter=True):
         self._execute('send-keys', xargs=[keys])
         if enter:

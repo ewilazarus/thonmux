@@ -55,7 +55,7 @@ class Session:
 
     @property
     def active_window(self):
-        matches = list(filter(lambda w: w.status == 'active', self.windows))
+        matches = list(filter(lambda w: w.active, self.windows))
         if len(matches) == 1:
             return matches[0]
         else:
@@ -110,7 +110,6 @@ class Session:
     def select_window(self, index):
         w = self.find_window(index)
         w.select()
-        raise EntityOutOfSync
 
     def next_window(self):
         self._execute('next-window')
