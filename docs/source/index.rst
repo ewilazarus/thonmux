@@ -1,58 +1,66 @@
-.. Thonmux documentation master file, created by
-   sphinx-quickstart on Sat Jun  6 16:36:14 2015.
+.. thonmux documentation master file, created by
+   sphinx-quickstart on Sun Jun  7 15:27:54 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Thonmux's documentation!
+Welcome to thonmux's documentation!
 ===================================
 
-Thonmux is a library designed to provide python interfaces for interacting with
-tmux.
+The thonmux library was designed to be an API to tmux and enable one to 
+interact with it programatically, using Python, in a pythonic way.
 
--------------------------------------------------------------------------------
+Get to know `the code`_.
 
-How to use Thonmux:
+.. _`the code`: thonmux.html
+
+How it works
+------------
 
     >>> from thonmux import Thonmux
-    >>> t = Thonmux('my-session')
+    >>> t = Thonmux('new-session')
     >>> t
-    Thonmux[Session(name=my-session, creation=2015-06-07 10:58:16, attached=False), Window(index=0, name=zsh, dimensions=[80x23], active=True), Pane(index=0, dimensions=[80x23], active=True)]
+    Thonmux[Session(name=new-session, creation=2015-06-07 18:43:20, attached=False), Window(index=0, name=zsh, dimensions=[159x42], active=True), Pane(index=0, dimensions=[159x42], active=True)]
     >>> t.new_window('new-window')
     >>> t
-    Thonmux[Session(name=my-session, creation=2015-06-07 10:58:16, attached=False), Window(index=1, name=new-window, dimensions=[80x23], active=True), Pane(index=0, dimensions=[80x23], active=True)]
+    Thonmux[Session(name=new-session, creation=2015-06-07 18:43:20, attached=False), Window(index=1, name=new-window, dimensions=[159x42], active=True), Pane(index=0, dimensions=[159x42], active=True)]
     >>> t.session.windows
-    [Window(index=0, name=zsh, dimensions=[80x23], active=False), Window(index=1, name=new-window, dimensions=[80x23], active=True)]
-    >>> t.window.panes
-    [Pane(index=0, dimensions=[80x23], active=True)]
+    [Window(index=0, name=zsh, dimensions=[159x42], active=False), Window(index=1, name=new-window, dimensions=[159x42], active=True)]
+    >>> t.window
+    Window(index=1, name=new-window, dimensions=[159x42], active=True)
+    >>> t.rename_window('renamed-window')
+    >>> t.window
+    Window(index=1, name=renamed-window, dimensions=[159x42], active=True)
+    >>> t.session.windows
+    [Window(index=0, name=zsh, dimensions=[159x42], active=False), Window(index=1, name=renamed-window, dimensions=[159x42], active=True)]
+    >>> t.split_window()
     >>> t.window_split()
-    >>> t.window.panes
-    [Pane(index=0, dimensions=[80x11], active=False), Pane(index=1, dimensions=[80x11], active=True)]
-    >>> t.send_keys('echo $HOME')
+    >>> t.pane
+    Pane(index=1, dimensions=[159x20], active=True)
+    >>> t.send_keys('ls -la | grep .py')
     ...
 
--------------------------------------------------------------------------------
+Installation
+------------
 
-Questions:
-
-1. Why Thonmux?
-   * There are other libraries/solutions out there built to interact with tmux, but most of them either don't use python or are not straight forward (pythonic).
-2. Why/where should I use it?
-   * You could use it to make all kinds of crazy configurations to your tmux environments such as to set them up programatically.
-3. Why not use something more solid like 'tmuxp' or even 'tmuxinator'?
-   * Tmuxp is a good project and I used it myself before starting the Thonmux project, but I needed something simpler. Tmuxinator? Also a good project but I don't really want to install ruby.
-4. How can I help?
-   * Send a pull request to http://github.com/ewilazarus/thonmux
+TODO
 
 
+FAQ
+---
+
+1. Why use thonmux?
+
+   * thonmux makes things pythonic.
+
+2. Why not use something else, like tmuxp?
+
+   * tmuxp is a good project but sometimes it doesn't attend to my
+     expectations.
+
+3. How can I help?
+
+   * https://github.com/ewilazarus/thonmux
 
 
 .. toctree::
    :maxdepth: 2
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`search`
-

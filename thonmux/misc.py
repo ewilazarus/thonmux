@@ -3,7 +3,7 @@ import types
 from functools import wraps
 import logging
 
-import exception
+from . import exception
 
 logger = logging.getLogger(__name__)
 

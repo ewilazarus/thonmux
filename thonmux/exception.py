@@ -4,22 +4,35 @@ logger = logging.getLogger(__name__)
 
 
 class MysteriousException(Exception):
+    """Raised whenever all the other exceptions declared in this package are
+    not triggered
+    """
     pass
 
 
 class TmuxNotAvailable(Exception):
+    """Raised when the tmux executable is either not found or not
+    accessible
+    """
     pass
 
 
 class IllegalCommand(Exception):
+    """Raised when trying to run an unknown or bad-composed command
+    """
     pass
 
 
 class EntityOutOfSync(Exception):
+    """Raised whenever an action changes the tmux entities' structure tree
+    """
     pass
 
 
 class EntityNotFound(Exception):
+    """Raised when trying to execute a command targeting a missing tmux
+    entity
+    """
     pass
 
 

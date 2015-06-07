@@ -1,9 +1,9 @@
 import logging
 import re
 
-import exception
-from misc import instance_factory
-import pane
+from . import exception
+from . import pane
+from .misc import instance_factory
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +32,16 @@ def parse(line):
 
 
 class Window:
+    """The tmux window entity
+
+    :param parent: The parent session of the window
+    :param str index: The index of the window
+    :param str name: The name of the window
+    :param bool active: The boolean describing if the window is active or not
+
+    :ivar list panes: The list of panes under the window
+    :ivar active_pane: The pane that currently has focus on the window
+    """
 
     def __init__(self, parent, index, name, active):
         self.parent = parent

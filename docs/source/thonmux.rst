@@ -1,86 +1,30 @@
 thonmux package
 ===============
 
-Submodules
-----------
+.. seealso:: `tmux manual`_
 
-thonmux.binding module
-----------------------
-
-.. automodule:: thonmux.binding
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.client module
----------------------
-
-.. automodule:: thonmux.client
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.exception module
-------------------------
-
-.. automodule:: thonmux.exception
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.main module
--------------------
+**All thonmux interaction with tmux should be done through the following 
+class:**
 
 .. automodule:: thonmux.main
     :members:
-    :undoc-members:
-    :show-inheritance:
 
-thonmux.misc module
--------------------
-
-.. automodule:: thonmux.misc
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.pane module
--------------------
-
-.. automodule:: thonmux.pane
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.server module
----------------------
-
-.. automodule:: thonmux.server
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.session module
-----------------------
+Additional classes
+------------------
 
 .. automodule:: thonmux.session
     :members:
-    :undoc-members:
-    :show-inheritance:
-
-thonmux.window module
----------------------
 
 .. automodule:: thonmux.window
     :members:
-    :undoc-members:
-    :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: thonmux
+.. automodule:: thonmux.pane
     :members:
-    :undoc-members:
-    :show-inheritance:
+
+Exceptions
+----------
+
+.. automodule:: thonmux.exception
+    :members:
+
+.. _`tmux manual`: http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tmux.1?query=tmux&sec=1

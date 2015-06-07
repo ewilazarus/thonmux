@@ -2,7 +2,7 @@ import logging
 from shutil import which
 from subprocess import Popen, PIPE
 
-import exception
+from . import exception
 
 logger = logging.getLogger(__name__)
 

@@ -2,9 +2,9 @@ from datetime import datetime
 import logging
 import re
 
-import exception
-from misc import instance_factory
-import window
+from . import exception
+from . import window
+from .misc import instance_factory
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ def parse(line):
     m = re.match(_regex, line)
     if m:
         kwargs['name'] = m.group('name')
-        kwargs['timestamp'] = parse_timestr(m.group('timestr'))
+        kwargs['creation'] = parse_timestr(m.group('timestr'))
         kwargs['width'] = int(m.group('width'))
         kwargs['height'] = int(m.group('height'))
         kwargs['attached'] = m.group('attached') is not None
@@ -36,11 +36,24 @@ def parse(line):
 
 
 class Session:
+    """The tmux session entity
 
-    def __init__(self, parent, name, timestamp, height, width, attached):
+    :param parent: The parent server of the session
+    :param str name: The name of the session
+    :param datetime creation: The creation time of the session
+    :param int height: The height of the session
+    :param int width: The width of the session
+    :param bool attached: The boolean describing if the session is attached or
+        not
+
+    :ivar list windows: The list of windows under the session
+    :ivar active_window: The window that currently has focus on this session
+    """
+
+    def __init__(self, parent, name, creation, height, width, attached):
         self.parent = parent
         self.name = name
-        self.creation = timestamp
+        self.creation = creation
         self.height = height
         self.width = width
         self.attached = attached

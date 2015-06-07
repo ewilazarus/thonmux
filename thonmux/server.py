@@ -1,11 +1,11 @@
 import logging
 import os
 
-import binding
-import client
-import exception
-from misc import instance_factory
-import session
+from . import binding
+from . import client
+from . import exception
+from . import session
+from .misc import instance_factory
 
 logger = logging.getLogger(__name__)
 

@@ -1,7 +1,7 @@
 import logging
 import re
 
-import exception
+from . import exception
 
 logger = logging.getLogger(__name__)
 
@@ -26,15 +26,13 @@ def parse(line):
 
 
 class Pane:
-    """class:Pane(parent, index, width, height, active)
+    """The tmux pane entity
+
     :param parent: The parent window of the pane
-    :param type: Window
     :param int index: The index of the pane
     :param int width: The width of the pane
     :param int height: The height of the pane
     :param bool active: The boolean describing if the pane is active or not
-
-    The tmux pane entity.
     """
 
     def __init__(self, parent, index, width, height, active):
@@ -56,31 +54,14 @@ class Pane:
         return self.parent._execute(command, target=self.index, xargs=xargs)
 
     def select(self):
-        """method:: select()
-
-        Selects the pane
-        """
         self._execute('select-pane')
         self.active = True
 
     def kill(self):
-        """method:: kill()
-        :raises exception.EntityOutOfSync:
-
-        Kills the pane
-        """
         self._execute('kill-pane')
         raise exception.EntityOutOfSync
 
     def resize(self, width, height, xargs=None):
-        """method: resize(width, height[, xargs])
-        :param int width: The target width of the pane
-        :param int height: The target height of the pane
-        :param xargs: Additional flags of the 'resize-pane' command
-        :type xargs: list or None
-
-        Resized the pane
-        """
         if not xargs:
             xargs = []
             xargs.append('-x')
@@ -90,17 +71,9 @@ class Pane:
         self._execute('resize-pane', xargs=xargs)
 
     def zoom(self):
-        """method: zoom()
-
-        Toggles zoom in/out of the pane
-        """
         self.resize(None, None, ['-Z'])
 
     def send_keys(self, keys, enter=True):
-        """method: send_keys(keys[, enter=True])
-        :param str keys: The key sequence to be sent to the pane
-        :param bool enter: If True, sends an enter after the :param:keys
-        """
         self._execute('send-keys', xargs=[keys])
         if enter:
             self._execute('send-keys', xargs=['C-m'])
