@@ -38,7 +38,7 @@ class Thonmux:
         self.session.select_window(index)
 
     def next_window(self):
-        self.window = self.session.next_window()
+        self.session.next_window()
 
     def previous_window(self):
         self.session.previous_window()
