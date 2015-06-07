@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 @synchronous
 class Thonmux:
-    """ **The** "tmux" interface.
+    """**The** "tmux" interface.
 
     This class prevents that interactions with "tmux" result in an out of sync
     entity tree, where the python objects representation differ from what
