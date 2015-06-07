@@ -12,13 +12,13 @@ class Thonmux:
     def __init__(self, session_name, socket_name='default', socket_path=None):
         server = Server(socket_name, socket_path)
         self.session = server.attach_session(session_name)
-        self.sync(False)
+        self._sync(False)
         logger.debug('Thonmux instance created -> ' + str(self))
 
     def __repr__(self):
         return 'Thonmux[%s, %s, %s]' % (self.session, self.window, self.pane)
 
-    def sync(self, session=True):
+    def _sync(self, session=True):
         if session:
             self.session = self.session._sync()
         self.window = self.session.active_window

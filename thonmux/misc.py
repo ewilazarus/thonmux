@@ -25,7 +25,7 @@ def synchronous(cls):
             try:
                 return f(self, *args, **kwargs)
             except exception.EntityOutOfSync:
-                self.sync()
+                self._sync()
             except exception.EntityNotFound:
                 # TODO
                 raise NotImplementedError('entity might not be up to date')
