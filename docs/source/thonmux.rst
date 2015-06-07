@@ -1,5 +1,5 @@
-thonmux package
-===============
+API: the thonmux package
+=======================
 
 .. seealso:: `tmux manual`_
 

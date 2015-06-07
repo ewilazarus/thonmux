@@ -62,5 +62,11 @@ FAQ
    * https://github.com/ewilazarus/thonmux
 
 
+See Also
+--------
+
 .. toctree::
    :maxdepth: 2
+
+    modules
+   thonmux
