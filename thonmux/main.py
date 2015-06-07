@@ -23,7 +23,7 @@ class Thonmux:
             self.session = self.session._sync()
         self.window = self.session.active_window
         self.pane = self.window.active_pane
-        logger.debug('Synchronizing Manager: ' + str(self))
+        logger.debug('Synchronizing Thonmux: ' + str(self))
 
     @property
     def session_name(self):
