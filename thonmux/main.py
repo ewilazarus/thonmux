@@ -64,8 +64,8 @@ class Thonmux:
     def toggle_zoom(self):
         self.pane.zoom()
 
-    def resize_pane(self, x, y):
-        self.pane.resize(x, y)
+    def resize_pane(self, width, height):
+        self.pane.resize(width, height)
 
     def send_keys(self, keys, enter=True):
         self.pane.send_keys(keys, enter)

@@ -72,10 +72,10 @@ class Pane:
         self._execute('kill-pane')
         raise exception.EntityOutOfSync
 
-    def resize(self, x, y, xargs=None):
-        """method: resize(x, y[, xargs])
-        :param int x: The target width of the pane
-        :param int y: The target height of the pane
+    def resize(self, width, height, xargs=None):
+        """method: resize(width, height[, xargs])
+        :param int width: The target width of the pane
+        :param int height: The target height of the pane
         :param xargs: Additional flags of the 'resize-pane' command
         :type xargs: list or None
 
@@ -84,15 +84,15 @@ class Pane:
         if not xargs:
             xargs = []
             xargs.append('-x')
-            xargs.append(x)
+            xargs.append(width)
             xargs.append('-y')
-            xargs.append(y)
+            xargs.append(height)
         self._execute('resize-pane', xargs=xargs)
 
     def zoom(self):
         """method: zoom()
 
-        Toggles zoom of the pane
+        Toggles zoom in/out of the pane
         """
         self.resize(None, None, ['-Z'])
 
