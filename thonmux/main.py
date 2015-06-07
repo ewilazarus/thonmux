@@ -1,3 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+    thonmux.main
+    ~~~~~~~~~~~~
+
+    Implements the interface to "tmux".
+
+    :copyright: (c) 2015 Gabriel Lima
+    :license: MIT, see LICENSE for more details
+"""
 import logging
 
 from misc import synchronous
