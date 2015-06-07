@@ -39,9 +39,11 @@ class Server:
         try:
             logger.debug('Checking if tmux server is already running')
             self._execute('has-session')
-        except exception.ServerNotFound:
+            self.fresh = False
+        except exception.EntityNotFound:
             logger.debug('Tmux server not running. Starting new tmux server')
             self._execute('new-session', dettached=True)
+            self.fresh = True
         self._sync()
         logger.debug('Server instance started -> ' + str(self))
 
@@ -73,11 +75,26 @@ class Server:
     def kill(self):
         self._execute('kill-server')
 
+    def new_session(self, name, dettached=True, start_dir=None):
+        xargs = []
+        xargs.append('-s')
+        xargs.append(name)
+        if start_dir:
+            xargs.append('-c')
+            xargs.append(start_dir)
+        self._execute('new-session', dettached=dettached, xargs=xargs)
+
     def find_session(self, name):
         matches = list(filter(lambda s: s.name == name, self.sessions))
         if len(matches) == 1:
             return matches[0]
+
+    def attach_session(self, name):
+        if self.fresh:
+            s = self.sessions[0]
+            s.rename(name)
         else:
-            # TODO
-            raise NotImplementedError(('server might not be up to date: try'
-                                       'sync and another search'))
+            s = self.find_session(name)
+            if not s:
+                s = self.new_session(name)
+        return s

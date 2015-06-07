@@ -11,15 +11,7 @@ class TmuxNotAvailable(Exception):
     pass
 
 
-class UnknownCommand(Exception):
-    pass
-
-
-class UnknownOption(Exception):
-    pass
-
-
-class CreateWindowFailed(Exception):
+class IllegalCommand(Exception):
     pass
 
 
@@ -27,31 +19,19 @@ class EntityOutOfSync(Exception):
     pass
 
 
-class ServerNotFound(EntityOutOfSync):
-    pass
-
-
-class SessionNotFound(EntityOutOfSync):
-    pass
-
-
-class WindowNotFound(EntityOutOfSync):
-    pass
-
-
-class PaneNotFound(EntityOutOfSync):
+class EntityNotFound(Exception):
     pass
 
 
 def dispatcher(message):
     e = {
-        'unknown command': UnknownCommand,
-        'tmux: unknown option': UnknownOption,
-        'failed to connect to server': ServerNotFound,
-        'session not found': SessionNotFound,
-        'window not found': WindowNotFound,
-        'can\'t find pane': PaneNotFound,
-        'create window failed': CreateWindowFailed,
+        'unknown command': IllegalCommand,
+        'tmux: unknown option': IllegalCommand,
+        'create window failed': IllegalCommand,
+        'failed to connect to server': EntityNotFound,
+        'session not found': EntityNotFound,
+        'window not found': EntityNotFound,
+        'can\'t find pane': EntityNotFound,
     }
     for error in e.keys():
         if message.startswith(error):

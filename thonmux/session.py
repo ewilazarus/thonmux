@@ -2,7 +2,7 @@ from datetime import datetime
 import logging
 import re
 
-from exception import EntityOutOfSync
+import exception
 from misc import instance_factory
 import window
 
@@ -48,10 +48,8 @@ class Session:
         logger.debug('Session instance created -> ' + str(self))
 
     def __repr__(self):
-        r = 'Session(name=%s, creation=%s)' % (self.name, self.creation)
-        if self.attached:
-            r += '*'
-        return r
+        return 'Session(name=%s, creation=%s, attached=%s)' % (
+               self.name, self.creation, self.attached)
 
     @property
     def active_window(self):
@@ -59,9 +57,7 @@ class Session:
         if len(matches) == 1:
             return matches[0]
         else:
-            # TODO
-            raise NotImplementedError(('session might not be up to date: try'
-                                       'sync and another search'))
+            raise exception.EntityNotFound
 
     def _sync(self):
         logger.debug('Synchronizing ' + str(self))
@@ -96,16 +92,14 @@ class Session:
             xargs.append('-c')
             xargs.append(start_dir)
         self._execute('new-window', target=target, xargs=xargs)
-        raise EntityOutOfSync
+        raise exception.EntityOutOfSync
 
     def find_window(self, index):
         matches = list(filter(lambda w: w.index == index, self.windows))
         if len(matches) == 1:
             return matches[0]
         else:
-            # TODO
-            raise NotImplementedError(('session might not be up to date: try'
-                                       'sync and another search'))
+            raise exception.EntityNotFound
 
     def select_window(self, index):
         w = self.find_window(index)
@@ -113,12 +107,12 @@ class Session:
 
     def next_window(self):
         self._execute('next-window')
-        raise EntityOutOfSync
+        raise exception.EntityOutOfSync
 
     def previous_window(self):
         self._execute('previous-window')
-        raise EntityOutOfSync
+        raise exception.EntityOutOfSync
 
     def last_window(self):
         self._execute('last-window')
-        raise EntityOutOfSync
+        raise exception.EntityOutOfSync

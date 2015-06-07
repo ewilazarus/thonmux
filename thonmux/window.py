@@ -1,7 +1,7 @@
 import logging
 import re
 
-from exception import EntityOutOfSync
+import exception
 from misc import instance_factory
 import pane
 
@@ -45,13 +45,8 @@ class Window:
         return self.index < other.index
 
     def __repr__(self):
-        r = 'Window(index=%s, name=%s, dimensions=[%sx%s])' % (self.index,
-                                                               self.name,
-                                                               self.width,
-                                                               self.height)
-        if self.active:
-                r += '*'
-        return r
+        return 'Window(index=%s, name=%s, dimensions=[%sx%s], active=%s)' % (
+               self.index, self.name, self.width, self.height, self.active)
 
     @property
     def active_pane(self):
@@ -59,9 +54,7 @@ class Window:
         if len(matches) == 1:
             return matches[0]
         else:
-            # TODO
-            raise NotImplementedError(('window might not be up to date: try'
-                                       'sync and another search'))
+            raise exception.EntityNotFound
 
     @property
     def height(self):
@@ -78,15 +71,15 @@ class Window:
                                       parent=self, output=output)
         return self
 
-    def _execute(self, command, dettached=False, target=None, xargs=None):
+    def _execute(self, command, target=None, xargs=None):
         t = self.index
         if target:
             t += ('.' + target)
-        return self.parent._execute(command, dettached, t, xargs)
+        return self.parent._execute(command, target=t, xargs=xargs)
 
     def kill(self):
         self._execute('kill-window')
-        raise EntityOutOfSync
+        raise exception.EntityOutOfSync
 
     def rename(self, name):
         # TODO: slugfy(name)
@@ -101,7 +94,7 @@ class Window:
             xargs.append('-c')
             xargs.append(start_dir)
         self._execute('split-window', target=target, xargs=xargs)
-        raise EntityOutOfSync
+        raise exception.EntityOutOfSync
 
     def select(self, xargs=None):
         self._execute('select-window', xargs=xargs)
@@ -112,9 +105,7 @@ class Window:
         if len(matches) == 1:
             return matches[0]
         else:
-            # TODO
-            raise NotImplementedError(('window might not be up to date: try'
-                                       'sync and another search'))
+            raise exception.EntityNotFound
 
     def select_pane(self, index):
         p = self.find_pane(index)
