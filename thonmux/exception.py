@@ -36,7 +36,7 @@ def dispatcher(message):
     for error in e.keys():
         if message.startswith(error):
             raise e[error](message)
+    raise MysteriousException(message)
     logger.error(('Please, check if this exception has already been notified,'
                   ' otherwise notify it at'
                   ' https://github.com/ewilazarus/thonmux/issues'))
-    raise MysteriousException(message)
