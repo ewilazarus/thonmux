@@ -3,7 +3,7 @@ thonmux
 
 API for interaction with tmux in a pythonic way.
 
-#How it works
+###How it works
 
     >>> from thonmux import Thonmux
     >>> t = Thonmux('new-session')
