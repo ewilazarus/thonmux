@@ -25,23 +25,11 @@ class Thonmux:
         self.pane = self.window.active_pane
         logger.debug('Synchronizing Thonmux: ' + str(self))
 
-    @property
-    def session_name(self):
-        return self.session.name
-
     def kill_session(self, name):
         self.session.kill()
 
     def rename_session(self, name):
         self.session.rename(name)
-
-    @property
-    def window_name(self):
-        return self.window.name
-
-    @property
-    def window_index(self):
-        return self.window.index
 
     def new_window(self, name, start_dir=None, target=None):
         self.session.new_window(name, start_dir, target)
@@ -66,10 +54,6 @@ class Thonmux:
 
     def window_split(self, horizontal=False, start_dir=None, target=None):
         self.window.split(horizontal, start_dir, target)
-
-    @property
-    def pane_index(self):
-        return self.pane.index
 
     def select_pane(self, index):
         self.window.select_pane(index)

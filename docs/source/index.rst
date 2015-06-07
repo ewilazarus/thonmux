@@ -13,30 +13,22 @@ tmux.
 
 How to use Thonmux:
 
-    >>> from thonmux import Server, Manager
-    >>> server = Server()
-    >>> server.sessions
-    [Session(name=0, creation=2015-06-06 12:55:21, attached=False)]
-    >>> server.new_session('new-session')
-    >>> server.sessions
-    [Session(name=0, creation=2015-06-06 12:55:21, attached=False), Session(name=new-session, creation=2015-06-06 16:57:30, attached=False)]
-    >>> session = server.find_session('new-session')
-    >>> session
-    Session(name=new-session, creation=2015-06-06 16:57:30, attached=False)
-    >>> m = Manager(session)
-    >>> m
-    Manager[session=Session(name=new-session, creation=2015-06-06 16:57:30, attached=False), window=Window(index=0, name=zsh, dimensions=[80x23], active=True, pane=Pane(index=0, dimensions=[80x23], active=True)]
-    >>> m.new_window('new-window')
-    >>> m
-    Manager[session=Session(name=new-session, creation=2015-06-06 16:57:30, attached=False), window=Window(index=1, name=new-window, dimensions=[80x23], active=True, pane=Pane(index=0, dimensions=[80x23], active=True)]
-    >>> m.session.windows
+    >>> from thonmux import Thonmux
+    >>> t = Thonmux('my-session')
+    >>> t
+    Thonmux[Session(name=my-session, creation=2015-06-07 10:58:16, attached=False), Window(index=0, name=zsh, dimensions=[80x23], active=True), Pane(index=0, dimensions=[80x23], active=True)]
+    >>> t.new_window('new-window')
+    >>> t
+    Thonmux[Session(name=my-session, creation=2015-06-07 10:58:16, attached=False), Window(index=1, name=new-window, dimensions=[80x23], active=True), Pane(index=0, dimensions=[80x23], active=True)]
+    >>> t.session.windows
     [Window(index=0, name=zsh, dimensions=[80x23], active=False), Window(index=1, name=new-window, dimensions=[80x23], active=True)]
-    >>> m.window.panes
+    >>> t.window.panes
     [Pane(index=0, dimensions=[80x23], active=True)]
-    >>> m.window_split()
-    >>> m.window.panes
+    >>> t.window_split()
+    >>> t.window.panes
     [Pane(index=0, dimensions=[80x11], active=False), Pane(index=1, dimensions=[80x11], active=True)]
-    m.send_keys('echo $HOME')
+    >>> t.send_keys('echo $HOME')
+    ...
 
 -------------------------------------------------------------------------------
 
