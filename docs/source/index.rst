@@ -10,6 +10,26 @@ Welcome to thonmux's documentation!
 
 The thonmux library was designed to be a Python API to *interact with tmux in a pythonic way*.
 
+Supported commands
+------------------
+
+* kill-pane - :meth:`thonmux.Thonmux.kill_pane`
+* kill-window - :meth:`thonmux.Thonmux.kill_window`
+* last-window - :meth:`thonmux.Thonmux.last_window`
+* new-window - :meth:`thonmux.Thonmux.new_window`
+* next-window - :meth:`thonmux.Thonmux.next_window`
+* previous-window - :meth:`thonmux.Thonmux.previous_window`
+* rename-session - :meth:`thonmux.Thonmux.rename_session`
+* rename-window - :meth:`thonmux.Thonmux.rename_window`
+* resize-pane - :meth:`thonmux.Thonmux.resize_pane`
+* select-pane - :meth:`thonmux.Thonmux.select_pane`
+* select-window - :meth:`thonmux.Thonmux.select_window`
+* send-keys - :meth:`thonmux.Thonmux.send_keys`
+* window-split - :meth:`thonmux.Thonmux.window_split`
+
+There's also a convenience command: toggle-zoom - :meth:`thonmux.Thonmux.toggle_zoom` (zooms in/out of the
+tracked)
+
 Quickstart
 ----------
 
@@ -38,8 +58,9 @@ Quickstart
 
 Installation
 ------------
+::
 
-    pip install thonmux
+   $ pip install thonmux
 
 FAQ
 ---
@@ -57,6 +78,9 @@ FAQ
 
    * https://github.com/ewilazarus/thonmux
 
+4. I found a bug, what do I do?
+
+   * Please notify it at https://github.com/ewilazarus/thonmux/issues
 
 Contents:
 

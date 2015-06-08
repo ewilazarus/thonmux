@@ -25,25 +25,6 @@ class Thonmux:
     All tmux commands are run against the tracked *session*, *window* and
     *pane* as needed.
 
-    Currently, there's support for the following tmux command:
-
-    * kill-pane
-    * kill-window
-    * last-window
-    * new-window
-    * next-window
-    * previous-window
-    * rename-session
-    * rename-window
-    * resize-pane
-    * select-pane
-    * select-window
-    * send-keys
-    * window-split
-
-    There's also a convenience command: toggle-zoom (zooms in/out of the
-    tracked *pane*)
-
     :param str session_name: The name of target session. If a session with the
         provided name already exists, it will attach to it. Otherwise, it will
         create a new session with the provided name
