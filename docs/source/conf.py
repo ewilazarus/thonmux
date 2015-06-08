@@ -259,11 +259,3 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
-
-# MOCK:
-from unittest.mock import MagicMock
-import thonmux.binding as binding
-#binding._which_tmux = MagicMock(return_value=None)
-#binding.run = MagicMock(return_value=[])
-binding._which_tmux = MagicMock(return_value=True)
-binding.run = MagicMock(return_value=[])
