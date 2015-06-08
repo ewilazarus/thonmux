@@ -6,6 +6,7 @@
 Welcome to thonmux's documentation!
 ===================================
 
+.. note:: This package is not Python 2.x compatible.
 
 The thonmux library was designed to be a Python API to *interact with tmux in a pythonic way*.
 
@@ -38,7 +39,7 @@ Quickstart
 Installation
 ------------
 
-TODO
+    pip install thonmux
 
 FAQ
 ---

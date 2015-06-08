@@ -27,3 +27,7 @@ API for interaction with tmux in a pythonic way.
     Pane(index=1, dimensions=[159x20], active=True)
     >>> t.send_keys('ls -la | grep .py')
     ...
+
+###Documentation
+
+http://thonmux.readthedocs.org/en/latest/index.html
