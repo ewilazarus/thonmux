@@ -263,5 +263,7 @@ texinfo_documents = [
 # MOCK:
 from unittest.mock import MagicMock
 import thonmux.binding as binding
-binding._which_tmux = MagicMock(return_value=None)
+#binding._which_tmux = MagicMock(return_value=None)
+#binding.run = MagicMock(return_value=[])
+binding._which_tmux = MagicMock(return_value=True)
 binding.run = MagicMock(return_value=[])
