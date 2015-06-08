@@ -6,15 +6,11 @@
 Welcome to thonmux's documentation!
 ===================================
 
-The thonmux library was designed to be an API to tmux and enable one to 
-interact with it programatically, using Python, in a pythonic way.
 
-Get to know `the code`_.
+The thonmux library was designed to be a Python API to *interact with tmux in a pythonic way*.
 
-.. _`the code`: thonmux.html
-
-How it works
-------------
+Quickstart
+----------
 
     >>> from thonmux import Thonmux
     >>> t = Thonmux('new-session')
@@ -66,6 +62,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+   self
    thonmux
 
 Indices and tables
