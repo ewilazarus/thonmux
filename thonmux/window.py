@@ -35,12 +35,14 @@ class Window:
     """The tmux window entity
 
     :param parent: The parent session of the window
+    :type parent: :class:`Session`
     :param str index: The index of the window
     :param str name: The name of the window
     :param bool active: The boolean describing if the window is active or not
 
     :ivar list panes: The list of panes under the window
     :ivar active_pane: The pane that currently has focus on the window
+    :vartype active_pane: :class:`Pane`
     """
 
     def __init__(self, parent, index, name, active):

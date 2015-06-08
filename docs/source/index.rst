@@ -1,5 +1,5 @@
 .. thonmux documentation master file, created by
-   sphinx-quickstart on Sun Jun  7 15:27:54 2015.
+   sphinx-quickstart on Mon Jun  8 10:57:42 2015.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
@@ -44,7 +44,6 @@ Installation
 
 TODO
 
-
 FAQ
 ---
 
@@ -62,11 +61,17 @@ FAQ
    * https://github.com/ewilazarus/thonmux
 
 
-See Also
---------
+Contents:
 
 .. toctree::
    :maxdepth: 2
 
-    modules
    thonmux
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
+

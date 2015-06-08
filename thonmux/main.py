@@ -18,8 +18,8 @@ class Thonmux:
     It works by keeping track of the *session* provided to its constructor, as
     well as to its active *window* and active *pane*. Whenever an action that
     would alter the tree's state happens, it raises an
-    `exception.EntityOutOfSync`_ that is handled by reconstructing the 
-    tree and updating the references of the tracked *session*, *window* and 
+    :class:`exception.EntityOutOfSync` that is handled by reconstructing the
+    tree and updating the references of the tracked *session*, *window* and
     *pane*.
 
     All tmux commands are run against the tracked *session*, *window* and
@@ -27,35 +27,38 @@ class Thonmux:
 
     Currently, there's support for the following tmux command:
 
-    * rename-session
+    * kill-pane
+    * kill-window
+    * last-window
     * new-window
-    * select-window
     * next-window
     * previous-window
-    * last-window
+    * rename-session
     * rename-window
-    * kill-window
-    * window-split
-    * select-pane
-    * kill-pane
     * resize-pane
+    * select-pane
+    * select-window
     * send-keys
+    * window-split
 
     There's also a convenience command: toggle-zoom (zooms in/out of the
     tracked *pane*)
 
     :param str session_name: The name of target session. If a session with the
         provided name already exists, it will attach to it. Otherwise, it will
-        create a new session with the provided name.
+        create a new session with the provided name
     :param str socket_name: The name of the socket to be used to localize the
-        tmux server.
+        tmux server
     :param socket_path: The path of the socket to be used to localize the
-        tmux server.
+        tmux server
     :type socket_path: str or None
 
     :ivar session: the tracked *session*
+    :vartype session: :class:`Session`
     :ivar window: the tracked *window*
+    :vartype window: :class:`Window`
     :ivar pane: the tracked *pane*
+    :vartype pane: :class:`Pane`
     """
 
     def __init__(self, session_name, socket_name='default', socket_path=None):

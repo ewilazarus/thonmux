@@ -48,6 +48,7 @@ class Session:
 
     :ivar list windows: The list of windows under the session
     :ivar active_window: The window that currently has focus on this session
+    :vartype active_window: :class:`Window`
     """
 
     def __init__(self, parent, name, creation, height, width, attached):

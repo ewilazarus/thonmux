@@ -1,30 +1,15 @@
-API: the thonmux package
-=======================
+thonmux package
+===============
 
-.. seealso:: `tmux manual`_
+Module contents
+---------------
 
-**All thonmux interaction with tmux should be done through the following 
-class:**
-
-.. automodule:: thonmux.main
+.. automodule:: thonmux
     :members:
 
-Additional classes
-------------------
-
-.. automodule:: thonmux.session
-    :members:
-
-.. automodule:: thonmux.window
-    :members:
-
-.. automodule:: thonmux.pane
-    :members:
-
-Exceptions
+Submodules
 ----------
 
-.. automodule:: thonmux.exception
-    :members:
+.. toctree::
 
-.. _`tmux manual`: http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man1/tmux.1?query=tmux&sec=1
+   thonmux.exception

@@ -23,6 +23,17 @@ _tmpdir = _characterize()
 
 
 class Server:
+    """The tmux server entity
+
+    :param str socket_name: The name of the socket to be used to localize the
+        tmux server
+    :param socket_path: The path of the socket to be used to localize the tmux
+        server
+    :type socket_path: str or None
+
+    :ivar list sessions: The list of sessions under the server
+    :ivar list clients: The list of clients under the server
+    """
 
     def __init__(self, socket_name='default', socket_path=None):
         prefix = []

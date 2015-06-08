@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 # thonmux documentation build configuration file, created by
-# sphinx-quickstart on Sun Jun  7 15:27:54 2015.
+# sphinx-quickstart on Mon Jun  8 10:57:42 2015.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.

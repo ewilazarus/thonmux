@@ -29,6 +29,7 @@ class Pane:
     """The tmux pane entity
 
     :param parent: The parent window of the pane
+    :type parent: :class:`Window`
     :param int index: The index of the pane
     :param int width: The width of the pane
     :param int height: The height of the pane
