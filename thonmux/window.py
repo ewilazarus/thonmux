@@ -122,3 +122,4 @@ class Window:
     def select_pane(self, index):
         p = self.find_pane(index)
         p.select()
+        raise exception.EntityOutOfSync
