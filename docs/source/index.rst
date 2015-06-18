@@ -25,10 +25,16 @@ Supported commands
 * select-pane - :meth:`thonmux.Thonmux.select_pane`
 * select-window - :meth:`thonmux.Thonmux.select_window`
 * send-keys - :meth:`thonmux.Thonmux.send_keys`
-* window-split - :meth:`thonmux.Thonmux.window_split`
+* split-window - :meth:`thonmux.Thonmux.split_window`
 
-There's also a convenience command: toggle-zoom - :meth:`thonmux.Thonmux.toggle_zoom` (zooms in/out of the
-tracked)
+There's also a few convenience commands:
+
+* toggle-zoom - :meth:`thonmux.Thonmux.toggle_zoom` (zooms in/out of the
+    tracked pane)
+* next-pane - :meth:`thonmux.Thonmux.next_pane` (selects the next pane under
+    the tracked window)
+* previous-pane - :meth:`thonmux.Thonmux.previous_pane` (selects the previous
+    pane under the tracked window)
 
 Quickstart
 ----------
@@ -49,7 +55,7 @@ Quickstart
     Window(index=1, name=renamed-window, dimensions=[159x42], active=True)
     >>> t.session.windows
     [Window(index=0, name=zsh, dimensions=[159x42], active=False), Window(index=1, name=renamed-window, dimensions=[159x42], active=True)]
-    >>> t.window_split()
+    >>> t.split_window()
     >>> t.pane
     Pane(index=1, dimensions=[159x20], active=True)
     >>> t.send_keys('ls -la | grep .py')

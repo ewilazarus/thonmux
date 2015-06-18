@@ -115,7 +115,7 @@ class Thonmux:
         """
         self.window.kill()
 
-    def window_split(self, horizontal=False, start_dir=None):
+    def split_window(self, horizontal=False, start_dir=None):
         """Splits the tracked *pane*. Updates the tracked *window* and *pane*
         references
 
@@ -133,6 +133,18 @@ class Thonmux:
         :param str index: The index of the target pane
         """
         self.window.select_pane(index)
+
+    def next_pane(self):
+        """Selects the next pane under the tracked *window*. Updates the
+        tracked *pane* reference
+        """
+        self.pane.next()
+
+    def previous_pane(self):
+        """Selects the previous pane under the tracked *window*. Updates the
+        tracked *pane* reference
+        """
+        self.pane.previous()
 
     def kill_pane(self):
         """Kills (removes) the tracked *pane* from under the tracked *window*

@@ -86,7 +86,7 @@ class Window:
     def _execute(self, command, target=None, xargs=None):
         t = self.index
         if target:
-            t += ('.' + target)
+            t += target if target.startswith('.') else ('.' + target)
         return self.parent._execute(command, target=t, xargs=xargs)
 
     def kill(self):

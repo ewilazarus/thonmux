@@ -51,8 +51,9 @@ class Pane:
         return 'Pane(index=%s, dimensions=[%dx%d], active=%s)' % (
                self.index, self.width, self.height, self.active)
 
-    def _execute(self, command, xargs=None):
-        return self.parent._execute(command, target=self.index, xargs=xargs)
+    def _execute(self, command, target=None, xargs=None):
+        t = target or self.index
+        return self.parent._execute(command, target=t, xargs=xargs)
 
     def select(self):
         self._execute('select-pane')
@@ -78,3 +79,11 @@ class Pane:
         self._execute('send-keys', xargs=[keys])
         if enter:
             self._execute('send-keys', xargs=['C-m'])
+
+    def next(self):
+        self._execute('select-pane', target='.+')
+        raise exception.EntityOutOfSync
+
+    def previous(self):
+        self._execute('select-pane', target='.-')
+        raise exception.EntityOutOfSync
