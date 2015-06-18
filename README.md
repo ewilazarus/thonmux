@@ -21,7 +21,7 @@ API for interaction with tmux in a pythonic way.
     Window(index=1, name=renamed-window, dimensions=[159x42], active=True)
     >>> t.session.windows
     [Window(index=0, name=zsh, dimensions=[159x42], active=False), Window(index=1, name=renamed-window, dimensions=[159x42], active=True)]
-    >>> t.window_split()
+    >>> t.split_window()
     >>> t.pane
     Pane(index=1, dimensions=[159x20], active=True)
     >>> t.send_keys('ls -la | grep .py')
