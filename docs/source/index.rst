@@ -6,16 +6,16 @@
 Welcome to thonmux's documentation!
 ===================================
 
-.. note:: This package is not Python 2.x compatible.
-
 The thonmux library was designed to be a Python API to *interact with tmux in a pythonic way*.
 
 Supported commands
 ------------------
 
+* attach-session - :meth:`thonmux.Thonmux.attach_session`
 * kill-pane - :meth:`thonmux.Thonmux.kill_pane`
 * kill-window - :meth:`thonmux.Thonmux.kill_window`
 * last-window - :meth:`thonmux.Thonmux.last_window`
+* new-session - :meth:`thonmux.Thonmux.new_session`
 * new-window - :meth:`thonmux.Thonmux.new_window`
 * next-window - :meth:`thonmux.Thonmux.next_window`
 * previous-window - :meth:`thonmux.Thonmux.previous_window`
@@ -29,23 +29,22 @@ Supported commands
 
 There's also a few convenience commands:
 
-* toggle-zoom - :meth:`thonmux.Thonmux.toggle_zoom` (zooms in/out of the
-    tracked pane)
 * next-pane - :meth:`thonmux.Thonmux.next_pane` (selects the next pane under
     the tracked window)
 * previous-pane - :meth:`thonmux.Thonmux.previous_pane` (selects the previous
     pane under the tracked window)
+* toggle-zoom - :meth:`thonmux.Thonmux.toggle_zoom` (zooms in/out of the
+    tracked pane)
 
 Quickstart
 ----------
 
     >>> from thonmux import Thonmux
-    >>> t = Thonmux('new-session')
-    >>> t
-    Thonmux[Session(name=new-session, creation=2015-06-07 18:43:20, attached=False), Window(index=0, name=zsh, dimensions=[159x42], active=True), Pane(index=0, dimensions=[159x42], active=True)]
+    >>> t = Thonmux()
+    >>> t.new_session('new-session', dettached=False)
+    >>> t.session
+	Session(name=new-session, creation=2015-06-07 18:43:20, attached=True)
     >>> t.new_window('new-window')
-    >>> t
-    Thonmux[Session(name=new-session, creation=2015-06-07 18:43:20, attached=False), Window(index=1, name=new-window, dimensions=[159x42], active=True), Pane(index=0, dimensions=[159x42], active=True)]
     >>> t.session.windows
     [Window(index=0, name=zsh, dimensions=[159x42], active=False), Window(index=1, name=new-window, dimensions=[159x42], active=True)]
     >>> t.window
