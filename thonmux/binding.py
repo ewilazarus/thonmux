@@ -1,8 +1,19 @@
 import logging
-from shutil import which
+import sys
 from subprocess import Popen, PIPE
 
 from . import exception
+
+if sys.version_info >= (3, 0):
+    from shutil import which
+else:
+    def which(command):
+        import os
+        path = os.getenv('PATH')
+        for p in path.split(os.path.pathsep):
+            p = os.path.join(p, command)
+            if os.path.exists(p) and os.access(p, os.X_OK):
+                return p
 
 logger = logging.getLogger(__name__)
 
@@ -28,9 +39,10 @@ def run(command):
     ptmux = _which_tmux()
     args = [ptmux] + command
 
-    with Popen(args, stdout=PIPE, stderr=PIPE, universal_newlines=True) as p:
-        stdout, stderr = p.communicate()
-        returncode = p.returncode
+    p = Popen(args, stdout=PIPE, stderr=PIPE, universal_newlines=True)
+    stdout, stderr = p.communicate()
+    returncode = p.returncode
+
     stdout = _normalize(stdout)
     stderr = _normalize(stderr)
     logger.debug('return-code: ' + str(returncode))
