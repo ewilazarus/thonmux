@@ -8,6 +8,11 @@ if sys.version_info >= (3, 0):
     from shutil import which
 else:
     def which(command):
+        """Alternative to the python3 'shutil.which' function
+
+        Special thanks to Abhijit and his SO answer:
+            http://stackoverflow.com/a/9877856/2943653
+        """
         import os
         path = os.getenv('PATH')
         for p in path.split(os.path.pathsep):
