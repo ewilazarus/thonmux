@@ -15,12 +15,12 @@ class Thonmux:
     sync entity tree, where the python objects representation differ from what
     really exists in tmux.
 
-    It works by keeping track of the *session* provided to its constructor, as
-    well as to its active *window* and active *pane*. Whenever an action that
-    would alter the tree's state happens, it raises an
-    :class:`exception.EntityOutOfSync` that is handled by reconstructing the
-    tree and updating the references of the tracked *session*, *window* and
-    *pane*.
+    It works by keeping track of the *session* derived from the *server* 
+    created in its constructor, as well as to its active *window* and active 
+    *pane*. Whenever an action that would alter the tree's state happens, it 
+    raises an :class:`exception.EntityOutOfSync` that is handled by
+    reconstructing the tree and updating the references of the tracked 
+    *session*, *window* and *pane*.
 
     All tmux commands are run against the tracked *session*, *window* and
     *pane* as needed.
@@ -42,14 +42,12 @@ class Thonmux:
     :vartype pane: :class:`Pane`
     """
 
-    def __init__(self, session_name, socket_name='default', socket_path=None):
-        server = Server(socket_name, socket_path)
-        self.session = server.attach_session(session_name)
-        self._sync(False)
+    def __init__(self, socket_name='default', socket_path=None):
+        self.server = Server(socket_name, socket_path)
         logger.debug('Thonmux instance created -> ' + str(self))
 
     def __repr__(self):
-        return 'Thonmux[%s, %s, %s]' % (self.session, self.window, self.pane)
+        return 'Thonmux(Server=%s)' % self.server
 
     def _sync(self, session=True):
         if session:
@@ -57,6 +55,29 @@ class Thonmux:
         self.window = self.session.active_window
         self.pane = self.window.active_pane
         logger.debug('Synchronizing Thonmux: ' + str(self))
+
+    def new_session(self, session_name, dettached=True, start_dir=None):
+        """Creates a new *session*
+
+        :param str session_name: The name of the target session.
+        :param bool dettached: Wheter or not to immediately attach to the 
+            created session. True, means not to attach.
+        :param str start_dir: The starting directory of the session.
+        """
+        self.server.new_session(session_name, dettached, start_dir)
+        if not dettached:
+            self.attach(session_name)
+
+    def attach_session(self, session_name):
+        """Attaches to a session
+
+        There must be a session with the session_name under the current tmux
+        server.
+
+        :param str session_name: The name of the target session.
+        """
+        self.session = self.server.attach_session(session_name)
+        self._sync(False)
 
     def rename_session(self, name):
         """Renames the tracked *session*

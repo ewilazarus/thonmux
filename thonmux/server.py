@@ -102,10 +102,10 @@ class Server:
 
     def attach_session(self, name):
         if self.fresh:
-            s = self.sessions[0]
-            s.rename(name)
+            session = self.sessions[0]
+            session.rename(name)
         else:
-            s = self.find_session(name)
-            if not s:
-                s = self.new_session(name)
-        return s
+            session = self.find_session(name)
+            if not session:
+                raise exception.SessionDoesNotExist
+        return session

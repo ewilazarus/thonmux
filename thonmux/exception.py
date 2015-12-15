@@ -36,6 +36,20 @@ class EntityNotFound(Exception):
     pass
 
 
+class SessionDoesNotExist(Exception):
+    """Raised whenever the client tries to attach to a session that does not
+    exist under the current server
+    """
+    pass
+
+
+class SessionAlreadyExists(Exception):
+    """Raised whenever the client tries to create a session with a duplicated
+    name
+    """
+    pass
+
+
 def dispatcher(message):
     e = {
         'unknown command': IllegalCommand,
@@ -45,6 +59,7 @@ def dispatcher(message):
         'session not found': EntityNotFound,
         'window not found': EntityNotFound,
         'can\'t find pane': EntityNotFound,
+        'duplicate session': SessionAlreadyExists,
     }
     for error in e.keys():
         if message.startswith(error):

@@ -6,12 +6,11 @@ API for interaction with tmux in a pythonic way.
 ###How it works
 
     >>> from thonmux import Thonmux
-    >>> t = Thonmux('new-session')
-    >>> t
-    Thonmux[Session(name=new-session, creation=2015-06-07 18:43:20, attached=False), Window(index=0, name=zsh, dimensions=[159x42], active=True), Pane(index=0, dimensions=[159x42], active=True)]
+    >>> t = Thonmux()
+    >>> t.new_session('new-session', dettached=False)
+    >>> t.session
+	Session(name=new-session, creation=2015-06-07 18:43:20, attached=True)
     >>> t.new_window('new-window')
-    >>> t
-    Thonmux[Session(name=new-session, creation=2015-06-07 18:43:20, attached=False), Window(index=1, name=new-window, dimensions=[159x42], active=True), Pane(index=0, dimensions=[159x42], active=True)]
     >>> t.session.windows
     [Window(index=0, name=zsh, dimensions=[159x42], active=False), Window(index=1, name=new-window, dimensions=[159x42], active=True)]
     >>> t.window
