@@ -8,10 +8,11 @@ if sys.version_info >= (3, 0):
     from shutil import which
 else:
     def which(command):
-        """Alternative to the python3 'shutil.which' function
+        """
+        Alternative to the python3 'shutil.which' function
 
         Special thanks to Abhijit and his SO answer:
-            http://stackoverflow.com/a/9877856/2943653
+        http://stackoverflow.com/a/9877856/2943653
         """
         import os
         path = os.getenv('PATH')
@@ -24,8 +25,9 @@ logger = logging.getLogger(__name__)
 
 
 def _which_tmux():
-    """Returns the path to the tmux executable"""
-
+    """
+    Returns the path to the tmux executable
+    """
     logger.debug('Attempting to find tmux executable')
     ptmux = which('tmux')
     if not ptmux:

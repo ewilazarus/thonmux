@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 
 @synchronous
 class Thonmux:
-    """The tmux interface
+    """
+    The tmux interface
 
     This class prevents that interactions with tmux result in an out of
     sync entity tree, where the python objects representation differ from what
@@ -41,7 +42,6 @@ class Thonmux:
     :ivar pane: the tracked *pane*
     :vartype pane: :class:`Pane`
     """
-
     def __init__(self, socket_name='default', socket_path=None):
         self.server = Server(socket_name, socket_path)
         logger.debug('Thonmux instance created -> ' + str(self))
@@ -57,7 +57,8 @@ class Thonmux:
         logger.debug('Synchronizing Thonmux: ' + str(self))
 
     def new_session(self, session_name, dettached=True, start_dir=None):
-        """Creates a new *session*
+        """
+        Creates a new *session*
 
         :param str session_name: The name of the target session.
         :param bool dettached: Wheter or not to immediately attach to the 
@@ -69,7 +70,8 @@ class Thonmux:
             self.attach(session_name)
 
     def attach_session(self, session_name):
-        """Attaches to a session
+        """
+        Attaches to a session
 
         There must be a session with the session_name under the current tmux
         server.
@@ -80,14 +82,16 @@ class Thonmux:
         self._sync(False)
 
     def rename_session(self, name):
-        """Renames the tracked *session*
+        """
+        Renames the tracked *session*
 
         :param str name: The name to be applied to the session
         """
         self.session.rename(name)
 
     def new_window(self, name, start_dir=None):
-        """Creates a new window under the tracked *session*. Updates the
+        """
+        Creates a new window under the tracked *session*. Updates the
         tracked *session*, *window* and *pane* references
 
         :param str name: The name to be applied to the window
@@ -97,7 +101,8 @@ class Thonmux:
         self.session.new_window(name, start_dir=start_dir)
 
     def select_window(self, index):
-        """Selects the window with the given index under the tracked *session*.
+        """
+        Selects the window with the given index under the tracked *session*.
         Updates the tracked *window* and *pane* references
 
         :param str index: The index of the target window
@@ -105,39 +110,45 @@ class Thonmux:
         self.session.select_window(index)
 
     def next_window(self):
-        """Selects the next window under the tracked *session*. Updates the
+        """
+        Selects the next window under the tracked *session*. Updates the
         tracked *window* and *pane* references
         """
         self.session.next_window()
 
     def previous_window(self):
-        """Selects the previous window under the tracked *session*. Updates the
+        """
+        Selects the previous window under the tracked *session*. Updates the
         tracked *window* and *pane* references
         """
         self.session.previous_window()
 
     def last_window(self):
-        """Selects the last window under the tracked *session*. Updates the
+        """
+        Selects the last window under the tracked *session*. Updates the
         tracked *window* and *pane* references
         """
         self.session.last_window()
 
     def rename_window(self, name):
-        """Renames the tracked *window*
+        """
+        Renames the tracked *window*
 
         :param str name: The name to be applied to the window
         """
         self.window.rename(name)
 
     def kill_window(self):
-        """Kills (removes) the tracked *window* from under the tracked
+        """
+        Kills (removes) the tracked *window* from under the tracked
         *session*. Updates the tracked *session*, *window* and *pane*
         references
         """
         self.window.kill()
 
     def split_window(self, horizontal=False, start_dir=None):
-        """Splits the tracked *pane*. Updates the tracked *window* and *pane*
+        """
+        Splits the tracked *pane*. Updates the tracked *window* and *pane*
         references
 
         :param bool horizontal: Defines whether the split is going to be
@@ -148,7 +159,8 @@ class Thonmux:
         self.window.split(horizontal, start_dir=start_dir)
 
     def select_pane(self, index):
-        """Selects the pane with the given index under the tracked *window*.
+        """
+        Selects the pane with the given index under the tracked *window*.
         Updates the tracked *pane* reference
 
         :param str index: The index of the target pane
@@ -156,25 +168,29 @@ class Thonmux:
         self.window.select_pane(index)
 
     def next_pane(self):
-        """Selects the next pane under the tracked *window*. Updates the
+        """
+        Selects the next pane under the tracked *window*. Updates the
         tracked *pane* reference
         """
         self.pane.next()
 
     def previous_pane(self):
-        """Selects the previous pane under the tracked *window*. Updates the
+        """
+        Selects the previous pane under the tracked *window*. Updates the
         tracked *pane* reference
         """
         self.pane.previous()
 
     def kill_pane(self):
-        """Kills (removes) the tracked *pane* from under the tracked *window*
+        """
+        Kills (removes) the tracked *pane* from under the tracked *window*
         Updates the tracked *window* and *pane* references
         """
         self.pane.kill()
 
     def resize_pane(self, width, height):
-        """Resizes the tracked *pane* using the given width and height
+        """
+        Resizes the tracked *pane* using the given width and height
 
         :param str width: The width to be applied to the target pane
         :param str height: The height to be applied to the target pane
@@ -182,7 +198,8 @@ class Thonmux:
         self.pane.resize(width, height)
 
     def send_keys(self, keys, enter=True):
-        """Sends the given keys to the tracked *pane*
+        """
+        Sends the given keys to the tracked *pane*
 
         :param str keys: The string to be sent to the target pane
         :param bool enter: Defines whether an 'Enter' should be sent after the
@@ -191,6 +208,7 @@ class Thonmux:
         self.pane.send_keys(keys, enter)
 
     def toggle_zoom(self):
-        """Zooms in/out of the tracked *pane*
+        """
+        Zooms in/out of the tracked *pane*
         """
         self.pane.zoom()

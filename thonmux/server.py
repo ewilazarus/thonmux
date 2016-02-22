@@ -23,7 +23,8 @@ _tmpdir = _characterize()
 
 
 class Server:
-    """The tmux server entity
+    """
+    The tmux server entity
 
     :param str socket_name: The name of the socket to be used to localize the
         tmux server

@@ -36,7 +36,8 @@ def parse(line):
 
 
 class Session:
-    """The tmux session entity
+    """
+    The tmux session entity
 
     :param parent: The parent server of the session
     :param str name: The name of the session

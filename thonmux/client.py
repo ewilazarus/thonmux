@@ -25,7 +25,8 @@ def parse(line):
 
 
 class Client:
-    """The tmux client entity
+    """
+    The tmux client entity
 
     :param parent: The parent server of the client
     :type parent: :class:`server.Server`
@@ -34,7 +35,6 @@ class Client:
     :param str encoding: The encoding used by the client
     :param str session_name: The name of the session the client is attached to
     """
-
     def __init__(self, parent, path, terminal, encoding, session_name):
         self.parent = parent
         self.path = path

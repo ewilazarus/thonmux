@@ -32,7 +32,8 @@ def parse(line):
 
 
 class Window:
-    """The tmux window entity
+    """
+    The tmux window entity
 
     :param parent: The parent session of the window
     :type parent: :class:`Session`

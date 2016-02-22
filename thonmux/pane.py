@@ -26,7 +26,8 @@ def parse(line):
 
 
 class Pane:
-    """The tmux pane entity
+    """
+    The tmux pane entity
 
     :param parent: The parent window of the pane
     :type parent: :class:`Window`
