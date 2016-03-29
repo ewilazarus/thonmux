@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 class MysteriousException(Exception):
     """
-    Raised whenever all the other exceptions declared in this package are not 
+    Raised whenever all the other exceptions declared in this package are not
     triggered
     """
     pass
@@ -52,6 +52,10 @@ class SessionAlreadyExists(Exception):
     """
     pass
 
+class NestedSessions(Exception):
+    """
+    Raised whenever the client tries to create a session within another session
+    """
 
 def dispatcher(message):
     e = {
@@ -63,6 +67,7 @@ def dispatcher(message):
         'window not found': EntityNotFound,
         'can\'t find pane': EntityNotFound,
         'duplicate session': SessionAlreadyExists,
+        'sessions should be nested with care': NestedSessions,
     }
     for error in e.keys():
         if message.startswith(error):

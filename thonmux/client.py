@@ -3,11 +3,11 @@ import re
 
 logger = logging.getLogger(__name__)
 
-_regex = re.compile((r"^(?P<path>.+?):\s"
+_regex = re.compile(r"^(?P<path>.+?):\s"
                      "(?P<session_name>.+?)\s"
                      "\[\d+x\d+\s"
                      "(?P<terminal>.+?)\]\s"
-                     "\((?P<encoding>.+?)\)$"))
+                     "\((?P<encoding>.+?)\)$")
 
 
 def parse(line):

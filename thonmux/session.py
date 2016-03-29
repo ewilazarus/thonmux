@@ -8,13 +8,13 @@ from .misc import instance_factory
 
 logger = logging.getLogger(__name__)
 
-_regex = re.compile((r"^(?P<name>.+):\s"
-                    "\d+\swindows\s\(created\s\w+\s"
-                    "(?P<timestr>\w+\s+\d+\s\d+:\d+:\d+\s\d+)\)"
-                    "\s\["
-                    "(?P<width>\d+)x(?P<height>\d+)"
-                    ".*\]"
-                    "(\s\((?P<attached>attached)\))?$"))
+_regex = re.compile(r"^(?P<name>.+):\s"
+                     "\d+\swindows\s\(created\s\w+\s"
+                     "(?P<timestr>\w+\s+\d+\s\d+:\d+:\d+\s\d+)\)"
+                     "\s\["
+                     "(?P<width>\d+)x(?P<height>\d+)"
+                     ".*\]"
+                     "(\s\((?P<attached>attached)\))?$")
 
 
 def parse(line):

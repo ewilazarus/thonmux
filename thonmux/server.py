@@ -76,10 +76,9 @@ class Server:
         final_command = self.prefix[:]
         final_command += [command]
         if dettached:
-            final_command.append('-d')
+            final_command += ['-d']
         if target:
-            final_command.append('-t')
-            final_command.append(target)
+            final_command += ['-t', target]
         if xargs:
             final_command += xargs
         return binding.run(final_command)
@@ -87,26 +86,23 @@ class Server:
     def kill(self):
         self._execute('kill-server')
 
-    def new_session(self, name, dettached=True, start_dir=None):
-        xargs = []
-        xargs.append('-s')
-        xargs.append(name)
-        if start_dir:
-            xargs.append('-c')
-            xargs.append(start_dir)
-        self._execute('new-session', dettached=dettached, xargs=xargs)
-
     def find_session(self, name):
-        matches = list(filter(lambda s: s.name == name, self.sessions))
-        if len(matches) == 1:
-            return matches[0]
+        return next((s for s in self.sessions if s.name == name), None)
+
+    def new_session(self, name, dettached=True, start_dir=None):
+        session = self.find_session(name)
+        if session:
+            raise exception.SessionAlreadyExists
+        xargs = ['-s', name]
+        if start_dir:
+            xargs += ['-c', start_dir]
+        self._execute('new-session', dettached=dettached, xargs=xargs)
+        self._sync()
+        return self.find_session(name)
 
     def attach_session(self, name):
-        if self.fresh:
-            session = self.sessions[0]
-            session.rename(name)
-        else:
-            session = self.find_session(name)
-            if not session:
-                raise exception.SessionDoesNotExist
+        session = self.find_session(name)
+        if not session:
+            raise exception.SessionDoesNotExist
+        self._execute('attach-session', target=name)
         return session

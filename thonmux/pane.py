@@ -5,10 +5,10 @@ from . import exception
 
 logger = logging.getLogger(__name__)
 
-_regex = re.compile((r"^(?P<index>\d+):\s"
+_regex = re.compile(r"^(?P<index>\d+):\s"
                      "\[(?P<width>\d+)x(?P<height>\d+)\]"
                      ".*?"
-                     "(\((?P<active>active)\))?$"))
+                     "(\((?P<active>active)\))?$")
 
 
 def parse(line):

@@ -7,10 +7,10 @@ from .misc import instance_factory
 
 logger = logging.getLogger(__name__)
 
-_regex = re.compile((r"^(?P<index>\d+):\s"
+_regex = re.compile(r"^(?P<index>\d+):\s"
                      "(?P<name>.*?)"
                      "(?P<status>-|\*)?\s"
-                     ".*$"))
+                     ".*$")
 
 
 def parse(line):
