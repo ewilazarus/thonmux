@@ -63,11 +63,10 @@ class Window:
 
     @property
     def active_pane(self):
-        matches = list(filter(lambda p: p.active, self.panes))
-        if len(matches) == 1:
-            return matches[0]
-        else:
+        p = next((p for p in self.panes if p.active), None)
+        if not p:
             raise exception.EntityNotFound
+        return p
 
     @property
     def height(self):
@@ -100,12 +99,9 @@ class Window:
         self.name = name
 
     def split(self, horizontal=False, start_dir=None, target=None):
-        xargs = []
-        if horizontal:
-            xargs.append('-h')
+        xargs = ['-h'] if horizontal else []
         if start_dir:
-            xargs.append('-c')
-            xargs.append(start_dir)
+            xargs += ['-c', start_dir]
         self._execute('split-window', target=target, xargs=xargs)
         raise exception.EntityOutOfSync
 
@@ -114,11 +110,10 @@ class Window:
         self.active = True
 
     def find_pane(self, index):
-        matches = list(filter(lambda p: p.index == index, self.panes))
-        if len(matches) == 1:
-            return matches[0]
-        else:
+        p = next((lambda p: p.index == index for p in self.panes), None)
+        if not p:
             raise exception.EntityNotFound
+        return p
 
     def select_pane(self, index):
         p = self.find_pane(index)

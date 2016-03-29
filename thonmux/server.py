@@ -89,20 +89,29 @@ class Server:
     def find_session(self, name):
         return next((s for s in self.sessions if s.name == name), None)
 
-    def new_session(self, name, dettached=True, start_dir=None):
-        session = self.find_session(name)
-        if session:
-            raise exception.SessionAlreadyExists
+    def _create_session(self, name, background, start_dir):
         xargs = ['-s', name]
         if start_dir:
             xargs += ['-c', start_dir]
-        self._execute('new-session', dettached=dettached, xargs=xargs)
+        self._execute('new-session', dettached=background, xargs=xargs)
         self._sync()
         return self.find_session(name)
 
-    def attach_session(self, name):
+    def new_session(self, name, background=True, start_dir=None):
+        session = self.find_session(name)
+        if session:
+            raise exception.SessionAlreadyExists
+        session = self._create_session(name, background, start_dir)
+        if self.fresh:
+            self.find_session('0').kill()
+            self.fresh = False
+        self._sync()
+        return session
+
+    def attach_session(self, name, background=True):
         session = self.find_session(name)
         if not session:
             raise exception.SessionDoesNotExist
-        self._execute('attach-session', target=name)
+        if not background:
+            self._execute('attach-session', target=name)
         return session

@@ -23,7 +23,6 @@ else:
 
 logger = logging.getLogger(__name__)
 
-
 def _which_tmux():
     """
     Returns the path to the tmux executable
@@ -36,6 +35,8 @@ def _which_tmux():
     logger.debug('Found tmux executable in: "%s"' % ptmux)
     return ptmux
 
+_ptmux = _which_tmux()
+
 
 def _normalize(output):
     return [l.strip() for l in output.split('\n') if l != '']
@@ -43,8 +44,7 @@ def _normalize(output):
 
 def run(command):
     logger.info('Running command: tmux ' + ' '.join(command))
-    ptmux = _which_tmux()
-    args = [ptmux] + command
+    args = [_ptmux] + command
 
     p = Popen(args, stdout=PIPE, stderr=PIPE, universal_newlines=True)
     stdout, stderr = p.communicate()

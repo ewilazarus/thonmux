@@ -4,8 +4,8 @@ setup.py
 thonmux/__init__.py
 thonmux/binding.py
 thonmux/client.py
+thonmux/core.py
 thonmux/exception.py
-thonmux/main.py
 thonmux/misc.py
 thonmux/pane.py
 thonmux/server.py

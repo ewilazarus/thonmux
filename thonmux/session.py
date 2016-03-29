@@ -68,11 +68,10 @@ class Session:
 
     @property
     def active_window(self):
-        matches = list(filter(lambda w: w.active, self.windows))
-        if len(matches) == 1:
-            return matches[0]
-        else:
+        w = next((w for w in self.windows if w.active), None)
+        if not w:
             raise exception.EntityNotFound
+        return w
 
     def _sync(self):
         logger.debug('Synchronizing ' + str(self))
@@ -100,21 +99,17 @@ class Session:
         self.name = name
 
     def new_window(self, name, start_dir=None, target=None):
-        xargs = []
-        xargs.append('-n')
-        xargs.append(name)
+        xargs = ['-n', name]
         if start_dir:
-            xargs.append('-c')
-            xargs.append(start_dir)
+            xargs += ['-c', start_dir]
         self._execute('new-window', target=target, xargs=xargs)
         raise exception.EntityOutOfSync
 
     def find_window(self, index):
-        matches = list(filter(lambda w: w.index == index, self.windows))
-        if len(matches) == 1:
-            return matches[0]
-        else:
+        w = next((lambda w: w.index == index for w in self.windows), None)
+        if not w:
             raise exception.EntityNotFound
+        return w
 
     def select_window(self, index):
         w = self.find_window(index)

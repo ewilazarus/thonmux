@@ -35,6 +35,8 @@ class Thonmux:
         tmux server
     :type socket_path: str or None
 
+    :ivar server: the tracked *server*
+    :vartype server: :class:`Server`
     :ivar session: the tracked *session*
     :vartype session: :class:`Session`
     :ivar window: the tracked *window*
@@ -50,11 +52,12 @@ class Thonmux:
         return 'Thonmux(Server=%s)' % self.server
 
     def _sync(self):
+        self.session._sync()
         self.window = self.session.active_window
         self.pane = self.window.active_pane
         logger.debug('Synchronizing Thonmux: ' + str(self))
 
-    def new_session(self, session_name, dettached=True, start_dir=None):
+    def new_session(self, session_name, background=True, start_dir=None):
         """
         Creates a new *session*
 
@@ -63,10 +66,11 @@ class Thonmux:
             created session. True, means not to attach.
         :param str start_dir: The starting directory of the session.
         """
-        self.session = self.server.new_session(session_name, dettached, start_dir)
+        self.session = self.server.new_session(session_name, background,
+                                               start_dir)
         self._sync()
 
-    def attach_session(self, session_name):
+    def attach_session(self, session_name, background=True):
         """
         Attaches to a session
 
@@ -75,7 +79,7 @@ class Thonmux:
 
         :param str session_name: The name of the target session.
         """
-        self.session = self.server.attach_session(session_name)
+        self.session = self.server.attach_session(session_name, background)
         self._sync()
 
     def rename_session(self, name):

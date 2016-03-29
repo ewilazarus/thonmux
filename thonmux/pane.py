@@ -66,11 +66,7 @@ class Pane:
 
     def resize(self, width, height, xargs=None):
         if not xargs:
-            xargs = []
-            xargs.append('-x')
-            xargs.append(width)
-            xargs.append('-y')
-            xargs.append(height)
+            xargs = ['-x', width, '-y', height]
         self._execute('resize-pane', xargs=xargs)
 
     def zoom(self):
