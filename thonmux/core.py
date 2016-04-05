@@ -57,6 +57,12 @@ class Thonmux:
         self.pane = self.window.active_pane
         logger.debug('Synchronizing Thonmux: ' + str(self))
 
+    def kill_server(self):
+        """
+        Kills the current Tmux server
+        """
+        self.server.kill()
+
     def new_session(self, session_name, background=True, start_dir=None):
         """
         Creates a new *session*
